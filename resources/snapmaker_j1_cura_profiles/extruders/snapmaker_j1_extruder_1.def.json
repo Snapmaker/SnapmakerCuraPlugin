@@ -1,0 +1,32 @@
+{
+    "name": "Right Extruder",
+    "version": 2,
+    "inherits": "fdmextruder",
+    "metadata": {
+        "type": "extruder",
+        "author": "Snapmaker",
+        "manufacturer": "Snapmaker",
+        "machine": "snapmaker_j1",
+        "position": "1"
+    },
+    "overrides": {
+        "extruder_nr": {
+            "default_value": 1
+        },
+        "machine_nozzle_size": {
+            "default_value": 0.4
+        },
+        "material_diameter": {
+            "default_value": 1.75
+        },
+        "machine_extruder_cooling_fan_number": {
+            "default_value": 1
+        },
+        "machine_extruder_start_code": {
+            "default_value": ""
+        },
+        "machine_extruder_end_code": {
+            "default_value": "G0 F10000 X335\nM107 ;turn off fan"
+        }
+    }
+}
