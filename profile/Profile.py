@@ -130,7 +130,7 @@ class Profile:
             self._metadata["setting_version"] = "20"
 
         # if not it's not global, remove it
-        if self._metadata.get("global_quality", "False") != "False":  # export only if it's true
+        if self._metadata.get("global_quality", "False") == "False":  # export only if it's true
             del self._metadata["global_quality"]
 
         if self._metadata["type"] != "quality":  # fix quality_changes (exported) to quality
