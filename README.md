@@ -12,11 +12,11 @@ Working on:
 - Import Cura profile:
  
 ```Shell
-python scripts/import_curaprofile.py {Cura profile file} {output folder}
+python -m scripts.import_curaprofile {Cura profile file} {output folder}
 ```
 
-- Validate profiles for a machine:
+- Run checks on quality profile, and format it:
 
 ```Shell
-python scripts/validate_machine_quality.py {machine folder}
+python -m scripts.validate_machine_quality {quality file}
 ```
