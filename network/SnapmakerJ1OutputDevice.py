@@ -7,6 +7,7 @@ from PyQt6.QtNetwork import QTcpSocket
 from UM.FileHandler.WriteFileJob import WriteFileJob
 from UM.Mesh.MeshWriter import MeshWriter
 from UM.Message import Message
+from UM.Logger import Logger
 
 from cura.CuraApplication import CuraApplication
 from cura.PrinterOutput.NetworkedPrinterOutputDevice import NetworkedPrinterOutputDevice
@@ -45,7 +46,7 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
         self.setPriority(2)
         self.setShortDescription("Send to {}".format(self._address))
         self.setDescription("Send to {}".format(self.getId()))
-        self.setConnectionText("Connnected to {}".format(self.getId()))
+        self.setConnectionText("Connected to {}".format(self.getId()))
 
     def requestWrite(self, nodes: List["SceneNode"], file_name: Optional[str] = None,
                      limit_mimetypes: bool = False, file_handler: Optional["FileHandler"] = None,
@@ -74,25 +75,33 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
         self.connect()
 
     def connect(self) -> None:
+        self.disconnect()
+
         self.setConnectionState(ConnectionState.Connecting)
-
-        if self._socket.state() == QTcpSocket.SocketState.ConnectedState:
-            self._socket.abort()
-            self._socket.connected.disconnect(self.__socketConnected)
-            self._socket.readyRead.disconnect(self.__socketReadyRead)
-
         self._socket.connected.connect(self.__socketConnected)
         self._socket.readyRead.connect(self.__socketReadyRead)
         self._socket.connectToHost(self._address, 8888)
+
+        Logger.info("Disconnected from output device.")
+
+    def disconnect(self) -> None:
+        if self._socket.state() == QTcpSocket.SocketState.ConnectedState:
+            self._socket.connected.disconnect(self.__socketConnected)
+            self._socket.readyRead.disconnect(self.__socketReadyRead)
+            self._socket.close()
 
     def __socketConnected(self) -> None:
         if self._socket.state() == QTcpSocket.SocketState.ConnectedState:
             self.__sacpConnect()
 
     def __socketReadyRead(self) -> None:
+        if self._socket.state() != QTcpSocket.SocketState.ConnectedState:
+            Logger.debug("Socket not connected, abort read.")
+            return
+
         while True:
             data = self._socket.read(4)
-            if len(data) == 0:
+            if not data or len(data) == 0:
                 break
             if data[0] != 0xAA and data[1] != 0x55:
                 # discard this 4 bytes
@@ -110,6 +119,11 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
                 if receiver_valid_data[0] == 0:  # connected
                     self.setConnectionState(ConnectionState.Connected)
 
+            elif receiver_data.command_set == 0x01 and receiver_data.command_id == 0x05:
+                receiver_valid_data = SACP_validData(receiver_data.valid_data, "<B")
+                if receiver_valid_data[0] == 0:  # connected
+                    self.setConnectionState(ConnectionState.Closed)
+
             elif receiver_data.command_set == 0xb0 and receiver_data.command_id == 0x01:
                 md5_length = receiver_data.valid_data[0]
                 receiver_valid_data = SACP_validData(receiver_data.valid_data, "<H{0}sH".format(md5_length))
@@ -118,6 +132,7 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
 
                 package_data = self._data[(SACP_PACKAGE * package_index):(SACP_PACKAGE * (package_index + 1))]
                 self.__sacpSendGcodoFile(self._data_md5, package_data, package_index, sequence)
+
             elif receiver_data.command_set == 0xb0 and receiver_data.command_id == 0x02:
                 receiver_valid_data = SACP_validData(receiver_data.valid_data, "<B")
                 if receiver_valid_data[0] == 0:
@@ -130,7 +145,10 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
 
     def __onWriteFinished(self):
         # disconnect from remote
-        pass
+        self.__sacpDisconnect()
+
+        # disconnect socket
+        self.disconnect()
 
     def _sendFile(self) -> None:
         self._prepareSendFile()
@@ -138,11 +156,13 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
     def _sendFileFinished(self) -> None:
         self.writeFinished.emit()
         message = Message(
-            title="Sent G-code to {}".format(self.getId()),
+            title="Sent G-code file to {}".format(self.getId()),
             text="Please start print on the touchscreen.",
             lifetime=60,
         )
         message.show()
+
+        Logger.info("Send G-code file successfully")
 
     def _prepareSendFile(self) -> None:
         print_info = CuraApplication.getInstance().getPrintInformation()
@@ -167,8 +187,14 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
         # TODO: upload
         self.__sacpPrepareSendGcode(self._data, filename, self._data_md5, package_count)
 
+    def __sacpString(self, s: str) -> bytes:
+        s_utf = s.encode("utf-8")
+        return struct.pack("<H", len(s_utf)) + s_utf
+
     def __sacpConnect(self) -> None:
-        data = struct.pack("<HHH", 0, 0, 0)
+        # device name, client name, token
+        data = self.__sacpString("Destop") + self.__sacpString("Cura") + self.__sacpString("")
+        # struct.pack("<HHH", 0, 0, 0)
 
         packet = SACP_pack(receiver_id=2,
                            sender_id=0,
@@ -177,6 +203,16 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
                            command_set=0x01,
                            command_id=0x05,
                            send_data=data)
+        self._socket.write(packet)
+
+    def __sacpDisconnect(self) -> None:
+        packet = SACP_pack(receiver_id=2,
+                           sender_id=0,
+                           attribute=0,
+                           sequence=1,
+                           command_set=0x01,
+                           command_id=0x06,
+                           send_data=b'')
         self._socket.write(packet)
 
     def __sacpPrepareSendGcode(self, data: str, gcode_name, file_md5, package_count) -> None:

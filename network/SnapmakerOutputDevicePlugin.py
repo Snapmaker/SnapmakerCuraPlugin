@@ -30,19 +30,16 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
     def __prepare(self) -> None:
         self._discover_sockets = []
         for interface in QNetworkInterface.allInterfaces():
-            for addr in interface.addressEntries():
-                bcast_address = addr.broadcast()
-                ip_address = addr.ip()
-                if ip_address.isLoopback():
+            for address_entry in interface.addressEntries():
+                address = address_entry.ip()
+                if address.isLoopback():
                     continue
-                if bcast_address == ip_address:
-                    continue
-                if ip_address.protocol() != QAbstractSocket.NetworkLayerProtocol.IPv4Protocol:
+                if address.protocol() != QAbstractSocket.NetworkLayerProtocol.IPv4Protocol:
                     continue
 
-                Logger.info("Discovering printers on network interface: %s", ip_address.toString())
+                Logger.info("Discovering printers on network interface: %s", address.toString())
                 socket = QUdpSocket()
-                socket.bind(ip_address)
+                socket.bind(address)
                 socket.readyRead.connect(lambda: self._readSocket(socket))
                 self._discover_sockets.append(socket)
 
@@ -86,7 +83,6 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
             self.getOutputDeviceManager().addOutputDevice(device)
 
     def _readSocket(self, socket: QUdpSocket) -> None:
-        # devices = set()
         while socket.hasPendingDatagrams():
             data = socket.receiveDatagram()
             if data.isValid() and not data.senderAddress().isNull():

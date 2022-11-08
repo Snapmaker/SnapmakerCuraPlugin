@@ -7,6 +7,7 @@ IGNORED_QUALITY_KEYS = {
     # wall
     "fill_outline_gaps",  # =True
     "wall_material_flow",
+    "wall_line_width_x",  # unable to set
     "xy_offset",
 
     # top/bottom
@@ -54,6 +55,12 @@ IGNORED_QUALITY_KEYS = {
 
     # blackmagic?
     "relative_extrusion",
+
+    # deprecated in Cura 5
+    "outer_inset_first",
+    "speed_equalize_flow_enabled",
+    "speed_equalize_flow_max",
+    "travel_compensate_overlapping_walls_enabled",
 }
 
 # We use a unified quality keys to ensure every quality instances share
@@ -74,7 +81,10 @@ QUALITY_KEYS = {
     # top/bottom
     "bottom_layers",
     "top_bottom_thickness",
+    "bottom_thickness",
     "top_layers",
+    "top_bottom_pattern",
+    "top_bottom_pattern_0",
     "initial_layer_line_width_factor",
 
     # infill
@@ -94,12 +104,15 @@ QUALITY_KEYS = {
     "speed_infill",
     "speed_travel",
     "speed_travel_layer_0",
+    "speed_prime_tower",
 
     # bridge
     "bridge_settings_enabled",
     "bridge_enable_more_layers",  # we'd like to set it to False in all qualities
     "bridge_wall_material_flow",  # =100
     "bridge_wall_speed",  # =50
+    "bridge_skin_material_flow",  # =100
+    "bridge_skin_speed", # =50
 
     # travel
     "travel_avoid_distance",
@@ -107,6 +120,12 @@ QUALITY_KEYS = {
     "retraction_combing",  # =no_outer_surfaces, at least for J1
     "retraction_amount",
     "retraction_speed",
+    "retraction_hop_enabled",
+    "retraction_hop_only_when_collides",
+
+    # z seam
+    "z_seam_type",
+    "z_seam_position",
 
     # Acceleration
     # different qualities can set different accelerations
@@ -119,6 +138,7 @@ QUALITY_KEYS = {
     "acceleration_wall",
     "acceleration_wall_0",
     "acceleration_wall_x",
+    "acceleration_prime_tower",
 
     # cooling
     "cool_min_layer_time",
