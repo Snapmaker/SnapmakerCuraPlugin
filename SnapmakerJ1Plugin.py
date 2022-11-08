@@ -4,7 +4,6 @@ from typing import Optional
 
 from UM.Application import Application
 from UM.Extension import Extension
-from UM.Logger import Logger
 from UM.PluginRegistry import PluginRegistry
 from UM.Resources import Resources
 
@@ -68,14 +67,14 @@ class SnapmakerJ1Plugin(Extension):
                 file_path = os.path.join(plugin_machine_folder, filename)
                 shutil.copy2(file_path, definitions_path)
 
+        # copy extruders
         for filename in os.listdir(plugin_extruder_folder):
             if filename.endswith(".def.json"):
                 file_path = os.path.join(plugin_extruder_folder, filename)
                 shutil.copy2(file_path, extruder_path)
 
+        # copy quality files
         for filename in os.listdir(plugin_quality_folder):
             file_path = os.path.join(plugin_quality_folder, filename)
-            Logger.debug("-------------- file_path = %s %s", plugin_quality_folder, filename)
             if os.path.isdir(file_path):  # machine quality folder
-                Logger.debug("-------------- file_path = %s %s", file_path, quality_folder)
                 shutil.copytree(file_path, quality_folder, dirs_exist_ok=True)
