@@ -5,6 +5,7 @@
 Features:
 
 - Add Snapmaker J1 machine definitions and quality configurations.
+- Auto detection networked Snapmaker J1, and send G-code to the machine.
 
 ## How to install (Marketplace)
 
@@ -13,20 +14,14 @@ TODO
 ## How to Install (Manually)
 
 - Install Cura 5
-- Download `SnapmakerJ1CuraPlugin` in [release] tab.
+- Download `SnapmakerJ1CuraPlugin` in [release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
 - Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*. Copy downloaded plugin folder to `plugins` folder.
 - Re-start Cura.
 
-## Scripts
+## Manual Scripts (for quality maintainers)
 
-- Import Cura profile:
+- Convert Cura profile file to quality file:
  
 ```Shell
-python -m scripts.import_curaprofile {Cura profile file} {output folder}
-```
-
-- Run checks on quality profile, and format it:
-
-```Shell
-python -m scripts.validate_machine_quality {quality file}
+python cura_profile_to_quality.py {cura profile file}
 ```

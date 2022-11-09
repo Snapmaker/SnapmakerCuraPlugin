@@ -127,9 +127,9 @@ class Profile:
         value_section = parser["values"]
 
         for key in QUALITY_KEYS:
-            value = self._values[key]
-            value_section[key] = value
-            # parser.set("values", key, value)
+            if key in self._values:
+                value = self._values[key]
+                value_section[key] = value
 
         # order
         parser._sections["values"] = OrderedDict(sorted(value_section.items(), key=lambda item: item[0]))
@@ -194,7 +194,8 @@ class Profile:
             if key not in keys:
                 logging.warning("key {} is missing in profile".format(key))
 
+        # TODO: Use fdmprinters.def.json's default value if key is missing?
         # raise the first one
-        for key in QUALITY_KEYS:
-            if key not in keys:
-                raise InvalidProfileException("key {} is missing in profile".format(key))
+        # for key in QUALITY_KEYS:
+        #    if key not in keys:
+        #        raise InvalidProfileException("key {} is missing in profile".format(key))

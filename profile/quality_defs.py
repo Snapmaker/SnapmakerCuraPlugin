@@ -15,10 +15,12 @@ IGNORED_QUALITY_KEYS = {
     "xy_offset",
 
     # top/bottom
+    "skin_monotonic",  # =False
 
     # infill
     "infill_overlap_mm",  # =formula
     "infill_wipe_dist",  # =formula
+    "infill_randomize_start_location",
 
     # bridge
     "bridge_fan_speed_2",
@@ -65,6 +67,7 @@ IGNORED_QUALITY_KEYS = {
 
     # deprecated in Cura 5
     "outer_inset_first",
+    "fill_perimeter_gaps",
     "speed_equalize_flow_enabled",
     "speed_equalize_flow_max",
     "travel_compensate_overlapping_walls_enabled",
@@ -112,8 +115,8 @@ QUALITY_KEYS = {
     "retraction_combing",  # =no_outer_surfaces, at least for J1
     "retraction_amount",
     "retraction_speed",
-    # "retraction_hop_enabled",
-    # "retraction_hop_only_when_collides",
+    "retraction_hop_enabled",
+    "retraction_hop_only_when_collides",
     "retract_at_layer_change",
 
     # z seam

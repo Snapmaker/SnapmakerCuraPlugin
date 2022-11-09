@@ -10,8 +10,6 @@ from UM.Resources import Resources
 from cura.CuraApplication import CuraApplication
 from .PluginPreferences import PluginPreferences
 
-SNAPMAKER_J1_DEFINITION_NAME = "snapmaker_j1.def.json"
-
 
 class SnapmakerJ1Plugin(Extension):
 
@@ -25,10 +23,14 @@ class SnapmakerJ1Plugin(Extension):
         self._previous_version = "0.0.0"
 
         Application.getInstance().pluginsLoaded.connect(self._onPluginsLoaded)
+        Application.getInstance().engineCreatedSignal.connect(self._onEngineCreated)
 
     def _onPluginsLoaded(self) -> None:
+        # when plugins are loaded, we can actually get plugin id
         self._plugin_path = PluginRegistry.getInstance().getPluginPath(self.getPluginId())
 
+    def _onEngineCreated(self) -> None:
+        # preferences is initialized, we can set values by now
         self._preferences = PluginPreferences(self.getPluginId())
         self._preferences.addPrefenrece("version", "0.0.0")
 
