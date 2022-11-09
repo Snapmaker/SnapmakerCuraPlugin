@@ -11,6 +11,7 @@
             "1": "snapmaker_j1_extruder_1"
         },
         "has_machine_quality": true,
+        "has_materials": true,
         "quality_definition": "snapmaker_j1",
         "preferred_quality_type": "normal",
         "preferred_material": "generic_pla",
