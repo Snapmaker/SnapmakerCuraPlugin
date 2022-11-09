@@ -29,15 +29,15 @@ class SnapmakerJ1Plugin(Extension):
         # when plugins are loaded, we can actually get plugin id
         self._plugin_path = PluginRegistry.getInstance().getPluginPath(self.getPluginId())
 
-    def _onEngineCreated(self) -> None:
-        # preferences is initialized, we can set values by now
         self._preferences = PluginPreferences(self.getPluginId())
         self._preferences.addPrefenrece("version", "0.0.0")
 
         self._previous_version = self._preferences.getValue("version")
-        self._preferences.setValue("version", self.getVersion())
-
         self.installMachineProfiles()
+
+    def _onEngineCreated(self) -> None:
+        # preferences is initialized, we can set values by now
+        self._preferences.setValue("version", self.getVersion())
 
     def __shouldUpdateMachineProfiles(self) -> bool:
         # debugging mode, always update
@@ -79,4 +79,4 @@ class SnapmakerJ1Plugin(Extension):
         for filename in os.listdir(plugin_quality_folder):
             file_path = os.path.join(plugin_quality_folder, filename)
             if os.path.isdir(file_path):  # machine quality folder
-                shutil.copytree(file_path, quality_folder, dirs_exist_ok=True)
+                shutil.copytree(file_path, os.path.join(quality_folder, filename), dirs_exist_ok=True)
