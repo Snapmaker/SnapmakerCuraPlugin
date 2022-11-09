@@ -1,10 +1,14 @@
-
 # Ignore some keys that they shouldn't be in quality definition.
 IGNORED_QUALITY_KEYS = {
     # layer height
     "adaptive_layer_height_enabled",  # should be =false
 
+    # line width
+    "infill_line_width",  # =line_width
+    "skin_line_width",  # =line_width
+
     # wall
+    "inset_direction",  # ?
     "fill_outline_gaps",  # =True
     "wall_material_flow",
     "wall_line_width_x",  # unable to set
@@ -13,7 +17,6 @@ IGNORED_QUALITY_KEYS = {
     # top/bottom
 
     # infill
-    "infill_line_width",  # =line_width
     "infill_overlap_mm",  # =formula
     "infill_wipe_dist",  # =formula
 
@@ -24,6 +27,7 @@ IGNORED_QUALITY_KEYS = {
     "bridge_skin_density_3",
     "bridge_skin_speed_2",
     "bridge_skin_speed_3",
+    "bridge_skin_material_flow_3",
 
     # travel
     "travel_retract_before_outer_wall",  # =False
@@ -31,9 +35,12 @@ IGNORED_QUALITY_KEYS = {
     "retraction_extrusion_window",
 
     # z seam
-    "z_seam_type",
+    "z_seam_position",
     "z_seam_x",
     "z_seam_y",
+
+    # speed
+    "speed_equalize_flow_width_factor",
 
     # cooling
     "cool_fan_full_layer",  # =2
@@ -84,19 +91,40 @@ QUALITY_KEYS = {
     "bottom_thickness",
     "top_layers",
     "top_bottom_pattern",
-    "top_bottom_pattern_0",
+    # "top_bottom_pattern_0",
     "initial_layer_line_width_factor",
 
     # infill
     "infill_pattern",  # triangle
     "infill_sparse_density",
 
+    # bridge
+    "bridge_settings_enabled",
+    "bridge_enable_more_layers",  # we'd like to set it to False in all qualities
+    "bridge_wall_material_flow",  # =100
+    "bridge_wall_speed",  # =50
+    "bridge_skin_material_flow",  # =100
+    "bridge_skin_speed",  # =50
+
+    # travel
+    "travel_avoid_distance",
+    "travel_avoid_supports",
+    "retraction_combing",  # =no_outer_surfaces, at least for J1
+    "retraction_amount",
+    "retraction_speed",
+    # "retraction_hop_enabled",
+    # "retraction_hop_only_when_collides",
+    "retract_at_layer_change",
+
+    # z seam
+    "z_seam_type",
+
     # speed
     "speed_slowdown_layers",
     "skirt_brim_speed",  # TODO: check again
     "speed_print",
     "speed_layer_0",
-    "speed_print_layer_0",
+    # "speed_print_layer_0",  # this is set by speed_layer_0
     "speed_wall",
     "speed_wall_0",
     "speed_wall_x",
@@ -105,27 +133,6 @@ QUALITY_KEYS = {
     "speed_travel",
     "speed_travel_layer_0",
     "speed_prime_tower",
-
-    # bridge
-    "bridge_settings_enabled",
-    "bridge_enable_more_layers",  # we'd like to set it to False in all qualities
-    "bridge_wall_material_flow",  # =100
-    "bridge_wall_speed",  # =50
-    "bridge_skin_material_flow",  # =100
-    "bridge_skin_speed", # =50
-
-    # travel
-    "travel_avoid_distance",
-    "travel_avoid_supports",
-    "retraction_combing",  # =no_outer_surfaces, at least for J1
-    "retraction_amount",
-    "retraction_speed",
-    "retraction_hop_enabled",
-    "retraction_hop_only_when_collides",
-
-    # z seam
-    "z_seam_type",
-    "z_seam_position",
 
     # Acceleration
     # different qualities can set different accelerations
@@ -160,11 +167,15 @@ QUALITY_KEYS = {
 
     # dual
     "prime_tower_enable",  # defaults to False
+    "prime_tower_size",
     "prime_tower_position_x",
     "prime_tower_position_y",
+    "prime_tower_min_volume",
+    "prime_tower_brim_enable",
     "switch_extruder_retraction_amount",
     "switch_extruder_retraction_speeds",  # no use
     "switch_extruder_retraction_speed",
+    "switch_extruder_extra_prime_amount",
 
     # exp
     "slicing_tolerance",  # default middle, we use inclusive

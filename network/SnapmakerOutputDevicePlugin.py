@@ -23,8 +23,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         self._discover_sockets = []  # type: List[QUdpSocket]
 
-        # TODO: Start only when global container is J1
-        # Application.getInstance().globalContainerStackChanged.connect(self.start)
+        Application.getInstance().globalContainerStackChanged.connect(self._onGlobalContainerStackChanged)
         Application.getInstance().applicationShuttingDown.connect(self.stop)
 
     def __prepare(self) -> None:
@@ -41,14 +40,15 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
                 socket = QUdpSocket()
                 socket.bind(address)
                 socket.readyRead.connect(lambda: self._readSocket(socket))
-                self._discover_sockets.append(socket)
+                self._discover_sockets.append((socket, address_entry))
 
     def __discover(self) -> None:
         if not self._discover_sockets:
             self.__prepare()
 
-        for socket in self._discover_sockets:
-            socket.writeDatagram(b"discover", QHostAddress.SpecialAddress.Broadcast, DISCOVER_PORT)
+        for socket, address_entry in self._discover_sockets:
+            print("discover")
+            socket.writeDatagram(b"discover", address_entry.broadcast(), DISCOVER_PORT)
 
     def __parseMessage(self, ip: str, msg: str) -> None:
         """Parse message.
@@ -109,3 +109,13 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
     def startDiscovery(self) -> None:
         self.__discover()
+
+    def _onGlobalContainerStackChanged(self) -> None:
+        global_stack = Application.getInstance().getGlobalContainerStack()
+
+        # Start timer when active machine is Snapmaker J1 only
+        machine_name = global_stack.getProperty("machine_name", "value")
+        if machine_name == "Snapmaker J1":
+            self.start()
+        else:
+            self.stop()

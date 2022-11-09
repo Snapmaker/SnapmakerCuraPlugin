@@ -20,6 +20,7 @@ def import_profile(profile_path: Path) -> None:
 
     # parse curaprofile as zip file
     new_profile = Profile("New Profile")
+    new_profile.set_name("New Profile")
     new_profile.set_definition("snapmaker_j1")
 
     with zipfile.ZipFile(profile_path, "r") as archive:
@@ -32,6 +33,11 @@ def import_profile(profile_path: Path) -> None:
             profile.deserialize(serialized)
 
             new_profile.set_from_profile(profile)
+
+            # write to file for debugging
+            filename = profile_id if profile_id.endswith(".inst.cfg") else "{}.inst.cfg".format(profile_id)
+            with open(filename, "w") as f:
+                f.write(serialized)
 
     new_profile.validate_general()
     new_profile.validate_metadata()

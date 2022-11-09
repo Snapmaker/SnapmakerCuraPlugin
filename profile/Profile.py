@@ -20,6 +20,9 @@ class Profile:
         self._metadata = {}  # type: Dict[str, str]
         self._values = {}  # type: Dict[str, str]
 
+    def set_name(self, name: str) -> None:
+        self._name = name
+
     def set_definition(self, definition: str) -> None:
         self._definition = definition
 
@@ -141,12 +144,13 @@ class Profile:
             self._metadata.update(profile.metadata)
 
         for key, value in profile.values.items():
+            if key in IGNORED_QUALITY_KEYS:
+                continue
             if key not in self._values:
                 self._values[key] = value
             else:
                 if self._values[key] != value:
-                    logging.warning("Value conflicts %s with different values: %s and %s, using %s", key, self._values[key], value, value)
-                    self._values[key] = value
+                    logging.warning("Value Conflicts: %s = %s / %s (using %s)", key, self._values[key], value, self._values[key])
 
     def validate_general(self) -> None:
         if not self._name:
@@ -167,8 +171,8 @@ class Profile:
             self._metadata["type"] = "quality"
 
     def validate_values(self) -> None:
-        new_values = {}
         # check for existing values
+        has_error, error_msg = False, ""
         for key, value in self._values.items():
             # ignore some keys
             if key in IGNORED_QUALITY_KEYS:
@@ -177,13 +181,20 @@ class Profile:
 
             # key shoule be defined in standard keys
             if key not in QUALITY_KEYS:
-                raise InvalidProfileException("key %s isn't allowed." % key)
+                has_error, error_msg = True, "key {} isn't allowed.".format(key)
+                logging.warning(error_msg)
 
-            new_values[key] = value
+        if has_error and error_msg:
+            raise InvalidProfileException(error_msg)
 
         keys = set(self._values.keys())
+
+        # check all keys are specified
         for key in QUALITY_KEYS:
             if key not in keys:
-                raise InvalidProfileException("key %s is missing in profile" % key)
+                logging.warning("key {} is missing in profile".format(key))
 
-        self._values = new_values
+        # raise the first one
+        for key in QUALITY_KEYS:
+            if key not in keys:
+                raise InvalidProfileException("key {} is missing in profile".format(key))
