@@ -6,6 +6,7 @@ from UM.Logger import Logger
 from UM.OutputDevice.OutputDevicePlugin import OutputDevicePlugin
 
 from .SnapmakerJ1OutputDevice import SnapmakerJ1OutputDevice
+from ..config import MACHINE_NAME
 
 DISCOVER_PORT = 20054
 
@@ -47,7 +48,6 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
             self.__prepare()
 
         for socket, address_entry in self._discover_sockets:
-            print("discover")
             socket.writeDatagram(b"discover", address_entry.broadcast(), DISCOVER_PORT)
 
     def __parseMessage(self, ip: str, msg: str) -> None:
@@ -73,7 +73,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         # only accept Snapmaker J1 series
         model = properties.get("model", None)
-        if model != "J1":
+        if model != MACHINE_NAME:
             return
 
         device = self.getOutputDeviceManager().getOutputDevice(device_id)
@@ -115,7 +115,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         # Start timer when active machine is Snapmaker J1 only
         machine_name = global_stack.getProperty("machine_name", "value")
-        if machine_name == "Snapmaker J1":
+        if machine_name == MACHINE_NAME:
             self.start()
         else:
             self.stop()

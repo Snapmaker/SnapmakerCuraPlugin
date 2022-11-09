@@ -10,7 +10,7 @@ from profile.Profile import Profile
 def print_usage():
     print("Import Cura profile to create a new quality:")
     print("Usage:")
-    print("python cura_profile_to_quality {cura profile file}")
+    print("python cura_profile_to_quality.py {cura profile file}")
 
 
 def import_profile(profile_path: Path) -> None:
