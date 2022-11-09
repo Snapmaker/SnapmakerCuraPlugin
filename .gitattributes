@@ -1,0 +1,7 @@
+# git
+.git*                       export-ignore
+
+# project files
+profile/
+cura_profile_to_quality.py  export-ignore
+pack.sh
