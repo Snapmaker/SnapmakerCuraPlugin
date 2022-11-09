@@ -1,4 +1,5 @@
 import io
+from typing import Dict
 import logging
 from configparser import ConfigParser
 from collections import OrderedDict
@@ -16,8 +17,22 @@ class Profile:
         self.profile_id = profile_id
         self._name = ""
         self._definition = ""
-        self._metadata = {}
-        self._values = OrderedDict()
+        self._metadata = {}  # type: Dict[str, str]
+        self._values = {}  # type: Dict[str, str]
+
+    def set_name(self, name: str) -> None:
+        self._name = name
+
+    def set_definition(self, definition: str) -> None:
+        self._definition = definition
+
+    @property
+    def metadata(self) -> Dict[str, str]:
+        return self._metadata
+
+    @property
+    def values(self) -> Dict[str, str]:
+        return self._values
 
     def __parse_general(self, parser: ConfigParser) -> None:
         """
@@ -73,14 +88,17 @@ class Profile:
 
         self._metadata.update(metadata)
 
+        print(" * metadata = {}".format(self._metadata))
+
     def __parse_values(self, parser: ConfigParser) -> None:
         if not parser.has_section("values"):
             raise InvalidProfileException("Missing section 'value'")
 
+        print(" * values =")
         for key, value in parser["values"].items():
             # value = parser["values"][key]
-            # print("%s = %s" % (key, value))
             self._values[key] = value
+            print(" " * 4, "{} = {}".format(key, value))
 
     def deserialize(self, serialized: str) -> None:
         parser = ConfigParser(interpolation=None)
@@ -112,8 +130,6 @@ class Profile:
             value = self._values[key]
             value_section[key] = value
             # parser.set("values", key, value)
-        # for key, value in self._values.items():
-        #    value_section[key] = value
 
         # order
         parser._sections["values"] = OrderedDict(sorted(value_section.items(), key=lambda item: item[0]))
@@ -122,39 +138,63 @@ class Profile:
         parser.write(output)
         return output.getvalue()
 
+    def set_from_profile(self, profile: "Profile") -> None:
+        """Set/Combine from another profile."""
+        if not self._metadata:
+            self._metadata.update(profile.metadata)
+
+        for key, value in profile.values.items():
+            if key in IGNORED_QUALITY_KEYS:
+                continue
+            if key not in self._values:
+                self._values[key] = value
+            else:
+                if self._values[key] != value:
+                    logging.warning("Value Conflicts: %s = %s / %s (using %s)", key, self._values[key], value, self._values[key])
+
     def validate_general(self) -> None:
-        pass
+        if not self._name:
+            raise InvalidProfileException("No name set.")
+        if not self._definition:
+            raise InvalidProfileException("No definition set.")
 
     def validate_metadata(self) -> None:
-        if self._metadata["setting_version"] != "20":
+        if self._metadata.get("setting_version", "1") != "20":
             self._metadata["setting_version"] = "20"
 
         # if not it's not global, remove it
-        if self._metadata.get("global_quality", "False") == "False":  # export only if it's true
-            del self._metadata["global_quality"]
+        # if self._metadata.get("global_quality", "False") == "False":  # export only if it's true
+        #    del self._metadata["global_quality"]
 
         if self._metadata["type"] != "quality":  # fix quality_changes (exported) to quality
             logging.warning("profile type = %s, changing it to \"quality\"." % self._metadata["type"])
             self._metadata["type"] = "quality"
 
     def validate_values(self) -> None:
-        new_values = {}
         # check for existing values
+        has_error, error_msg = False, ""
         for key, value in self._values.items():
             # ignore some keys
             if key in IGNORED_QUALITY_KEYS:
-                logging.warning("Ignoring value %s (=%s)" % (key, value))
+                # logging.warning("Ignoring value %s (=%s)" % (key, value))
                 continue
 
             # key shoule be defined in standard keys
             if key not in QUALITY_KEYS:
-                raise InvalidProfileException("key %s isn't allowed." % key)
+                has_error, error_msg = True, "key {} isn't allowed.".format(key)
+                logging.warning(error_msg)
 
-            new_values[key] = value
+        if has_error and error_msg:
+            raise InvalidProfileException(error_msg)
 
         keys = set(self._values.keys())
+
+        # check all keys are specified
         for key in QUALITY_KEYS:
             if key not in keys:
-                raise InvalidProfileException("key %s is missing in profile" % key)
+                logging.warning("key {} is missing in profile".format(key))
 
-        self._values = new_values
+        # raise the first one
+        for key in QUALITY_KEYS:
+            if key not in keys:
+                raise InvalidProfileException("key {} is missing in profile".format(key))
