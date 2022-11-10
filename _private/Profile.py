@@ -4,7 +4,7 @@ import logging
 from configparser import ConfigParser
 from collections import OrderedDict
 
-from profile.quality_defs import QUALITY_KEYS, IGNORED_QUALITY_KEYS
+from _private.quality_defs import QUALITY_KEYS, IGNORED_QUALITY_KEYS
 
 
 class InvalidProfileException(Exception):
