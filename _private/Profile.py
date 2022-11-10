@@ -4,7 +4,7 @@ import logging
 from configparser import ConfigParser
 from collections import OrderedDict
 
-from _private.quality_defs import QUALITY_KEYS, IGNORED_QUALITY_KEYS
+from .quality_defs import QUALITY_KEYS, EXTRUDER_QUALITY_KEYS, IGNORED_QUALITY_KEYS
 
 
 class InvalidProfileException(Exception):
@@ -19,12 +19,16 @@ class Profile:
         self._definition = ""
         self._metadata = {}  # type: Dict[str, str]
         self._values = {}  # type: Dict[str, str]
+        self._is_global = True
 
     def set_name(self, name: str) -> None:
         self._name = name
 
     def set_definition(self, definition: str) -> None:
         self._definition = definition
+
+    def set_global(self, is_global: bool) -> None:
+        self._is_global = is_global
 
     @property
     def metadata(self) -> Dict[str, str]:
@@ -86,6 +90,9 @@ class Profile:
         else:
             print("Parsing global profile...")
 
+        if parser.has_option("metadata", "material"):
+            metadata["material"] = parser["metadata"]["material"]
+
         self._metadata.update(metadata)
 
         print(" * metadata = {}".format(self._metadata))
@@ -126,7 +133,9 @@ class Profile:
         parser.add_section("values")
         value_section = parser["values"]
 
-        for key in QUALITY_KEYS:
+        keys = QUALITY_KEYS if self._is_global else EXTRUDER_QUALITY_KEYS
+
+        for key in keys:
             if key in self._values:
                 value = self._values[key]
                 value_section[key] = value
@@ -146,11 +155,17 @@ class Profile:
         for key, value in profile.values.items():
             if key in IGNORED_QUALITY_KEYS:
                 continue
+
+            # limit for not global keys
+            if not self._is_global and key not in EXTRUDER_QUALITY_KEYS:
+                continue
+
             if key not in self._values:
                 self._values[key] = value
             else:
                 if self._values[key] != value:
-                    logging.warning("Value Conflicts: %s = %s / %s (using %s)", key, self._values[key], value, self._values[key])
+                    logging.warning("Value Conflicts: %s = %s / %s (using %s)", key, self._values[key], value,
+                                    self._values[key])
 
     def validate_general(self) -> None:
         if not self._name:
@@ -169,33 +184,3 @@ class Profile:
         if self._metadata["type"] != "quality":  # fix quality_changes (exported) to quality
             logging.warning("profile type = %s, changing it to \"quality\"." % self._metadata["type"])
             self._metadata["type"] = "quality"
-
-    def validate_values(self) -> None:
-        # check for existing values
-        has_error, error_msg = False, ""
-        for key, value in self._values.items():
-            # ignore some keys
-            if key in IGNORED_QUALITY_KEYS:
-                # logging.warning("Ignoring value %s (=%s)" % (key, value))
-                continue
-
-            # key shoule be defined in standard keys
-            if key not in QUALITY_KEYS:
-                has_error, error_msg = True, "key {} isn't allowed.".format(key)
-                logging.warning(error_msg)
-
-        if has_error and error_msg:
-            raise InvalidProfileException(error_msg)
-
-        keys = set(self._values.keys())
-
-        # check all keys are specified
-        for key in QUALITY_KEYS:
-            if key not in keys:
-                logging.warning("key {} is missing in profile".format(key))
-
-        # TODO: Use fdmprinters.def.json's default value if key is missing?
-        # raise the first one
-        # for key in QUALITY_KEYS:
-        #    if key not in keys:
-        #        raise InvalidProfileException("key {} is missing in profile".format(key))

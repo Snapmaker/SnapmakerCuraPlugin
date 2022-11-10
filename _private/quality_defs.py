@@ -75,7 +75,7 @@ IGNORED_QUALITY_KEYS = {
 
 # We use a unified quality keys to ensure every quality instances share
 # the same key set. Thus we won't miss something when modifying them.
-QUALITY_KEYS = {
+QUALITY_KEYS = [
     # layer height
     "layer_height",
     "layer_height_0",
@@ -182,4 +182,37 @@ QUALITY_KEYS = {
 
     # exp
     "slicing_tolerance",  # default middle, we use inclusive
-}
+]
+
+EXTRUDER_QUALITY_KEYS = [
+    "initial_layer_line_width_factor",
+    "travel_avoid_distance",
+    "travel_avoid_supports",
+    "retraction_amount",
+    "retraction_speed",
+    "retraction_hop_enabled",
+    "retraction_hop_only_when_collides",
+    "retract_at_layer_change",
+    "skirt_brim_speed",
+    "speed_travel",
+    "speed_travel_layer_0",
+    "speed_prime_tower",
+    "cool_min_layer_time",
+    "cool_min_speed",
+    "brim_line_count",
+    "skirt_gap",
+    "skirt_line_count",
+
+    # material
+    "material_print_temperature",
+    "material_print_temperature_layer_0",
+    "material_standby_temperature",
+    "material_initial_print_temperature",
+    "material_final_print_temperature",
+
+    # dual
+    "switch_extruder_retraction_amount",
+    "switch_extruder_retraction_speeds",
+    "switch_extruder_retraction_speed",
+    "switch_extruder_extra_prime_amount",
+]
