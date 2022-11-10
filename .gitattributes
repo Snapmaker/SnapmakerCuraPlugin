@@ -1,7 +1,10 @@
 # git
 .git*                       export-ignore
 
+# resources
+resources/fdmprinter.def.json export-ignore
+
 # project files
-profile/
+_private/                   export-ignore
 cura_profile_to_quality.py  export-ignore
-pack.sh
+pack.sh                     export-ignore

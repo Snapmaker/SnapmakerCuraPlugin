@@ -4,7 +4,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-from profile.Profile import Profile
+from _private.Profile import Profile
 
 
 def print_usage():

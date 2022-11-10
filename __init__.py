@@ -8,10 +8,12 @@ from .network.SnapmakerOutputDevicePlugin import SnapmakerOutputDevicePlugin
 def getMetaData():
     return {
         "mesh_writer": {
-            "extension": "gcode",
-            "description": "Snapmaker J1 G-code File",
-            "mime_type": "text/x-gcode",
-            "mode": FileWriter.OutputMode.TextMode,
+            "output": [{
+                "extension": "gcode",
+                "description": "Snapmaker J1 G-code File",
+                "mime_type": "text/x-gcode",
+                "mode": FileWriter.OutputMode.TextMode,
+            }]
         }
     }
 
