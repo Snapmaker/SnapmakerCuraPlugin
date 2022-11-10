@@ -2,6 +2,7 @@ from typing import Dict, Any, List
 import json
 import collections
 
+
 class Parameter:
 
     def __init__(self, key: str, ) -> None:
@@ -18,7 +19,7 @@ class ParameterDefinitions:
         self._parameters = {}
 
     @property
-    def parameters(self) -> Dict[Parameter]:
+    def parameters(self) -> Dict[str, Parameter]:
         return self._parameters
 
     def __deserialize_item(self, key: str, parsed: Dict[str, Any]) -> None:

@@ -5,6 +5,8 @@ import zipfile
 from pathlib import Path
 
 from _private.Profile import Profile
+from _private.parameters import ParameterDefinitions
+from _private.validate_parameters import validate_extruder_quality_values
 
 
 def print_usage():
@@ -13,15 +15,30 @@ def print_usage():
     print("python cura_profile_to_quality.py {cura profile file}")
 
 
+def get_parameter_definitions() -> ParameterDefinitions:
+    logging.info("Reading fdmprinter.def.json")
+    definition_file_path = os.path.join("resources", "fdmprinter.def.json")
+    definition_file_path = os.path.abspath(definition_file_path)
+    parameter_definitions = ParameterDefinitions()
+    with open(definition_file_path, "r") as f:
+        serialized = f.read()
+        parameter_definitions.deserialize(serialized)
+
+    return parameter_definitions
+
+
 def import_profile(profile_path: Path) -> None:
     if not os.path.exists(profile_path):
         print("profile file %s doesn't exists!" % profile_path)
         return
 
+    parameter_definitions = get_parameter_definitions()
+
     # parse curaprofile as zip file
     new_profile = Profile("New Profile")
     new_profile.set_name("New Profile")
     new_profile.set_definition("snapmaker_j1")
+    new_profile.set_global(False)
 
     with zipfile.ZipFile(profile_path, "r") as archive:
         for profile_id in archive.namelist():
@@ -41,7 +58,8 @@ def import_profile(profile_path: Path) -> None:
 
     new_profile.validate_general()
     new_profile.validate_metadata()
-    new_profile.validate_values()
+
+    validate_extruder_quality_values(new_profile)
 
     output_path = Path("output.inst.cfg")
     with open(output_path, "w") as f:
