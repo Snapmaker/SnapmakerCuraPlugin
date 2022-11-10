@@ -7,4 +7,4 @@ resources/fdmprinter.def.json export-ignore
 # project files
 _private/                   export-ignore
 cura_profile_to_quality.py  export-ignore
-pack.sh                     export-ignore
+check_quality_files.py      export-ignore
