@@ -138,7 +138,7 @@ class SnapmakerJ1GCodeWriter(MeshWriter):
         estimated_time = int(print_info.currentPrintTime)
 
         headers = [
-            ";HEADER START",
+            ";Header Start",
             ";Version:1",
             ";Slicer:CuraEngine",
             ";Printer:Snapmaker J1",
@@ -185,7 +185,7 @@ class SnapmakerJ1GCodeWriter(MeshWriter):
         thumbnail = self.__generateThumbnail()
         headers.append(";Thumbnail:{}".format(thumbnail))
 
-        headers.append(";HEADER END")
+        headers.append(";Header End")
         headers.append("")
 
         stream.write("\n".join(headers))
