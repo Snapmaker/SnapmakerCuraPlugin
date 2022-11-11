@@ -101,7 +101,7 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
 
         while True:
             data = self._socket.read(4)
-            if not data or len(data) == 0:
+            if not data or len(data) < 4:
                 break
             if data[0] != 0xAA and data[1] != 0x55:
                 # discard this 4 bytes

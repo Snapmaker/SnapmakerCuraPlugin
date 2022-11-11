@@ -33,7 +33,6 @@ IGNORED_QUALITY_KEYS = {
 
     # travel
     "travel_retract_before_outer_wall",  # =False
-    "retraction_count_max",
     "retraction_extrusion_window",
 
     # z seam
@@ -47,9 +46,6 @@ IGNORED_QUALITY_KEYS = {
     # cooling
     "cool_fan_full_layer",  # =2
     "cool_fan_speed",  # =100
-
-    # adhesion
-    "adhesion_type",  # =skirt
 
     # support
     "support_enable",  # =False, per-object
@@ -112,9 +108,12 @@ QUALITY_KEYS = [
     # travel
     "travel_avoid_distance",
     "travel_avoid_supports",
+    "travel_avoid_other_parts",
     "retraction_combing",  # =no_outer_surfaces, at least for J1
-    "retraction_amount",
     "retraction_speed",
+    "retraction_amount",
+    "retraction_count_max",
+    "retraction_extrusion_window",
     "retraction_hop_enabled",
     "retraction_hop_only_when_collides",
     "retract_at_layer_change",
@@ -136,6 +135,8 @@ QUALITY_KEYS = [
     "speed_travel",
     "speed_travel_layer_0",
     "speed_prime_tower",
+    "speed_support",
+    "speed_support_interface",
 
     # Acceleration
     # different qualities can set different accelerations
@@ -149,15 +150,32 @@ QUALITY_KEYS = [
     "acceleration_wall_0",
     "acceleration_wall_x",
     "acceleration_prime_tower",
+    "acceleration_support_interface",
 
     # cooling
     "cool_min_layer_time",
     "cool_min_speed",
 
     # adhesion
+    "adhesion_type",  # =skirt
     "brim_line_count",  # lower
     "skirt_gap",  # use smaller gap
     "skirt_line_count",
+
+    # support
+    "support_enable",
+    "support_roof_height",
+    "support_bottom_height",
+    "support_brim_enable",
+    "support_interface_enable",
+    "support_interface_density",
+    "support_interface_offset",
+    "support_interface_pattern",
+    "support_offset",
+    "support_wall_count",
+    "support_xy_distance",
+    "support_z_distance",
+    "minimum_interface_area",
 
     # material
     "material_bed_temperature",  # should be different for different materials TODO: re-check this later
@@ -169,7 +187,7 @@ QUALITY_KEYS = [
     "material_final_print_temperature",
 
     # dual
-    "prime_tower_enable",  # defaults to False
+    "prime_tower_enable",
     "prime_tower_size",
     "prime_tower_position_x",
     "prime_tower_position_y",
@@ -195,6 +213,12 @@ EXTRUDER_QUALITY_KEYS = [
     "retract_at_layer_change",
     "skirt_brim_speed",
 
+    # wall
+    "wall_overhang_angle",
+
+    # travel
+    "travel_avoid_other_parts",
+
     # speed
     "speed_print",
     "speed_layer_0",
@@ -207,12 +231,17 @@ EXTRUDER_QUALITY_KEYS = [
     "speed_travel",
     "speed_travel_layer_0",
     "speed_prime_tower",
+    "speed_support",
+    "speed_support_interface",
 
-    "cool_min_layer_time",
-    "cool_min_speed",
-    "brim_line_count",
     "skirt_gap",
     "skirt_line_count",
+
+    # support
+    "support_enable",
+
+    # adhesion
+    "adhesion_type",
 
     # material
     "material_print_temperature",
