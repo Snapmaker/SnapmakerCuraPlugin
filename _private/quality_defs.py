@@ -48,9 +48,6 @@ IGNORED_QUALITY_KEYS = {
     "cool_fan_full_layer",  # =2
     "cool_fan_speed",  # =100
 
-    # adhesion
-    "adhesion_type",  # =skirt
-
     # support
     "support_enable",  # =False, per-object
     "support_extruder_nr",
@@ -155,6 +152,7 @@ QUALITY_KEYS = [
     "cool_min_speed",
 
     # adhesion
+    "adhesion_type",  # =skirt
     "brim_line_count",  # lower
     "skirt_gap",  # use smaller gap
     "skirt_line_count",

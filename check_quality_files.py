@@ -3,7 +3,7 @@ import os.path
 
 from _private.Profile import Profile
 from _private.parameters import ParameterDefinitions
-from _private.validate_parameters import validate_extruder_quality_values
+from _private.validate_parameters import validate_global_quality_values, validate_extruder_quality_values
 
 
 def get_parameter_definitions() -> ParameterDefinitions:
@@ -41,13 +41,11 @@ def main():
 
         is_global_quality = profile.metadata["global_quality"] == "True"
         if is_global_quality:
-            # just do read check on global
-            continue
-
-        # set as not global
-        profile.set_global(False)
-
-        validate_extruder_quality_values(profile)
+            profile.set_global(True)
+            validate_global_quality_values(profile)
+        else:
+            profile.set_global(False)
+            validate_extruder_quality_values(profile)
 
         # write it back
         with open(quality_path, "w") as f:

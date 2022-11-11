@@ -54,9 +54,6 @@ class Profile:
         name = parser["general"]["name"]
         definition = parser["general"]["definition"]
 
-        print("---------- Read profile %s ----------" % name)
-        print(" * version = %s" % version)
-        print(" * definition = %s" % definition)
         self._name = name
         self._definition = definition
 
@@ -101,11 +98,9 @@ class Profile:
         if not parser.has_section("values"):
             raise InvalidProfileException("Missing section 'value'")
 
-        print(" * values =")
         for key, value in parser["values"].items():
             # value = parser["values"][key]
             self._values[key] = value
-            print(" " * 4, "{} = {}".format(key, value))
 
     def deserialize(self, serialized: str) -> None:
         parser = ConfigParser(interpolation=None)
