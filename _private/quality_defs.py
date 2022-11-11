@@ -251,6 +251,7 @@ EXTRUDER_QUALITY_KEYS = [
     "material_final_print_temperature",
 
     # dual
+    "prime_tower_enable",
     "switch_extruder_retraction_amount",
     "switch_extruder_retraction_speeds",
     "switch_extruder_retraction_speed",
