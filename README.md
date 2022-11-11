@@ -19,10 +19,10 @@ Wait for approval...
 - Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*, copy downloaded plugin folder to `plugins` directory.
 - Re-start Cura.
 
-## Manual Scripts (for quality maintainers)
+## Use Snapmaker Breakaway material
 
-- Convert Cura profile file to quality file:
- 
-```Shell
-python cura_profile_to_quality.py {cura profile file}
-```
+After installed the plugin, created a Snapmaker J1 printer in Cura, you should
+be able to see there are 2 extruders on top the window.
+
+To use **Snapmaker Breakaway** material, tap the extruder selector, in the
+extruder dialog, choose material > *Snapmaker* > *Breakaway* > *Breakaway Support*.
