@@ -1,9 +1,10 @@
 from PyQt6.QtCore import QTimer
-from PyQt6.QtNetwork import QNetworkInterface, QUdpSocket, QAbstractSocket, QHostAddress
+from PyQt6.QtNetwork import QNetworkInterface, QUdpSocket, QAbstractSocket
 
 from UM.Application import Application
 from UM.Logger import Logger
 from UM.OutputDevice.OutputDevicePlugin import OutputDevicePlugin
+from UM.Platform import Platform
 
 from .SnapmakerJ1OutputDevice import SnapmakerJ1OutputDevice
 from ..config import MACHINE_NAME
@@ -29,6 +30,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
     def __prepare(self) -> None:
         self._discover_sockets = []
+        available_port = 20054
         for interface in QNetworkInterface.allInterfaces():
             for address_entry in interface.addressEntries():
                 address = address_entry.ip()
@@ -39,7 +41,12 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
                 Logger.info("Discovering printers on network interface: %s", address.toString())
                 socket = QUdpSocket()
-                socket.bind(address)
+                if Platform.isWindows():
+                    # Need to bind to a specified port in order to let QUdpSocket receive datagram
+                    socket.bind(address, available_port)
+                    available_port += 1
+                else:
+                    socket.bind(address)
                 socket.readyRead.connect(lambda: self._readSocket(socket))
                 self._discover_sockets.append((socket, address_entry))
 
