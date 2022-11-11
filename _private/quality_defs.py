@@ -194,9 +194,20 @@ EXTRUDER_QUALITY_KEYS = [
     "retraction_hop_only_when_collides",
     "retract_at_layer_change",
     "skirt_brim_speed",
+
+    # speed
+    "speed_print",
+    "speed_layer_0",
+    # "speed_print_layer_0",  # this is set by speed_layer_0
+    "speed_wall",
+    "speed_wall_0",
+    "speed_wall_x",
+    "speed_topbottom",
+    "speed_infill",
     "speed_travel",
     "speed_travel_layer_0",
     "speed_prime_tower",
+
     "cool_min_layer_time",
     "cool_min_speed",
     "brim_line_count",
