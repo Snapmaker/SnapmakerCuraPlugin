@@ -9,13 +9,14 @@ Features:
 
 ## How to install (Marketplace)
 
-TODO
+Wait for approval...
 
 ## How to Install (Manually)
 
 - Install Cura 5
 - Download `SnapmakerJ1CuraPlugin` in [release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
-- Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*. Copy downloaded plugin folder to `plugins` folder.
+- Unzip downloaded plugin, rename the folder name to "SnapmakerJ1CuraPlugin" (if it has a version suffix).
+- Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*, copy downloaded plugin folder to `plugins` directory.
 - Re-start Cura.
 
 ## Manual Scripts (for quality maintainers)
