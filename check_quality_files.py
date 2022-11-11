@@ -44,8 +44,8 @@ def main():
             # just do read check on global
             continue
 
-        profile.set_global(is_global_quality)
-        print("global?", profile.metadata["global_quality"])
+        # set as not global
+        profile.set_global(False)
 
         validate_extruder_quality_values(profile)
 
