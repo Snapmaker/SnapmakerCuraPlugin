@@ -213,6 +213,9 @@ EXTRUDER_QUALITY_KEYS = [
     "retract_at_layer_change",
     "skirt_brim_speed",
 
+    # wall
+    "wall_overhang_angle",
+
     # travel
     "travel_avoid_other_parts",
 
@@ -236,6 +239,9 @@ EXTRUDER_QUALITY_KEYS = [
 
     # support
     "support_enable",
+
+    # adhesion
+    "adhesion_type",
 
     # material
     "material_print_temperature",
