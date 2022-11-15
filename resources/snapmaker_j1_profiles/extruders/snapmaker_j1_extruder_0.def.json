@@ -26,7 +26,7 @@
             "default_value": ""
         },
         "machine_extruder_end_code": {
-            "default_value": "G0 F10000 X-14\nM107 ;turn off fan"
+            "default_value": "G0 F10000 X-14"
         }
     }
 }
