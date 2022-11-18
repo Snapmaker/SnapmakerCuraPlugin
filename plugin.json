@@ -1,8 +1,9 @@
 {
     "name": "Snapmaker J1 Plugin",
     "author": "Snapmaker",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Provides support for Snapmaker J1.",
     "api": 8,
+    "supported_sdk_versions": ["7.0.0", "8.0.0"],
     "i18n-catalog": "cura"
 }
