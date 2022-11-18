@@ -66,6 +66,8 @@ class SnapmakerJ1OutputDevice(NetworkedPrinterOutputDevice):
         )
         message.show()
 
+        self._stream = StringIO()  # create a new io stream
+
         job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream, nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)
         job.setMessage(message)
