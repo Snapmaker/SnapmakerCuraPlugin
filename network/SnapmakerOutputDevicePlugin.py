@@ -194,6 +194,9 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         for sock in self._discover_sockets:
             sock.abort()
 
+        # clear all discover sockets
+        self._discover_sockets.clear()
+
         Logger.info("Snapmaker J1 discovering stopped.")
 
     def startDiscovery(self) -> None:
