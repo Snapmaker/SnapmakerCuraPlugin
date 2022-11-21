@@ -4,6 +4,6 @@
     "version": "0.1.1",
     "description": "Provides support for Snapmaker J1.",
     "api": 8,
-    "supported_sdk_versions": ["7.0.0", "8.0.0"],
+    "supported_sdk_versions": ["8.0.0", "8.1.0", "8.2.0"],
     "i18n-catalog": "cura"
 }
