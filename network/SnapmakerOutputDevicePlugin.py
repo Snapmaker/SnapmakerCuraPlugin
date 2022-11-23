@@ -90,11 +90,11 @@ class DiscoverSocket:
 
         while True:
             try:
-                msg, addr = self._socket.recvfrom(128)
+                msg, _ = self._socket.recvfrom(128)
             except TimeoutError:
                 break
 
-            ip, _ = addr
+            # ip, _ = addr
             try:
                 message = msg.decode("utf-8")
                 self.dataReady.emit(message)
@@ -155,7 +155,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
             return
 
         device_id = parts[0]
-        name, address = device_id.split("@")
+        name, address = device_id.rsplit("@", 1)
 
         properties = {}
         for part in parts[1:]:
@@ -166,8 +166,8 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
             properties[key] = value
 
         # only accept Snapmaker J1 series
-        model = properties.get("model", None)
-        if model != MACHINE_NAME:
+        model = properties.get("model", "")
+        if not model.startswith(MACHINE_NAME):
             return
 
         device = self.getOutputDeviceManager().getOutputDevice(device_id)
@@ -180,7 +180,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         # check for current global container
         global_stack = Application.getInstance().getGlobalContainerStack()
         machine_name = global_stack.getProperty("machine_name", "value")
-        if machine_name != MACHINE_NAME:
+        if not machine_name.startswith(MACHINE_NAME):
             return
 
         if not self._discover_timer.isActive():
@@ -207,7 +207,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         # Start timer when active machine is Snapmaker J1 only
         machine_name = global_stack.getProperty("machine_name", "value")
-        if machine_name == MACHINE_NAME:
+        if machine_name.startswith(MACHINE_NAME):
             self.start()
         else:
             self.stop()
