@@ -94,7 +94,6 @@ class DiscoverSocket:
             except TimeoutError:
                 break
 
-            # ip, _ = addr
             try:
                 message = msg.decode("utf-8")
                 self.dataReady.emit(message)
