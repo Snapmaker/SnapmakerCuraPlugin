@@ -215,6 +215,7 @@ EXTRUDER_QUALITY_KEYS = [
 
     # wall
     "wall_overhang_angle",
+    "wall_overhang_speed_factor",
 
     # travel
     "travel_avoid_other_parts",
