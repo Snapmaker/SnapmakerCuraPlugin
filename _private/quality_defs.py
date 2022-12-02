@@ -218,7 +218,7 @@ EXTRUDER_QUALITY_KEYS = [
     "wall_overhang_speed_factor",
 
     # travel
-    "travel_avoid_other_parts",
+    # "travel_avoid_other_parts",
 
     # speed
     "speed_print",
