@@ -85,13 +85,19 @@ class DiscoverSocket:
                     pass
 
     def __collect(self) -> None:
+        # the socket has abort and discover is cancelled
+        if not self._socket:
+            return
+
         if isinstance(self._socket, QUdpSocket):
             return
 
         while True:
             try:
                 msg, _ = self._socket.recvfrom(128)
-            except TimeoutError:
+            except (TimeoutError, ConnectionError):
+                # normal timeout, or ConnectionError (including ConnectionAbortedError, ConnectionRefusedError,
+                # ConnectionResetError) errors raise by the peer
                 break
 
             try:
