@@ -44,7 +44,6 @@ IGNORED_QUALITY_KEYS = {
     "speed_equalize_flow_width_factor",
 
     # cooling
-    "cool_fan_full_layer",  # =2
     "cool_fan_speed",  # =100
 
     # support
@@ -155,6 +154,7 @@ QUALITY_KEYS = [
     # cooling
     "cool_min_layer_time",
     "cool_min_speed",
+    "cool_fan_full_layer",
 
     # adhesion
     "adhesion_type",  # =skirt
@@ -178,7 +178,7 @@ QUALITY_KEYS = [
     "minimum_interface_area",
 
     # material
-    "material_bed_temperature",  # should be different for different materials TODO: re-check this later
+    "material_bed_temperature",
     "material_bed_temperature_layer_0",
     "material_print_temperature",
     "material_print_temperature_layer_0",
@@ -235,16 +235,20 @@ EXTRUDER_QUALITY_KEYS = [
     "speed_support",
     "speed_support_interface",
 
-    "skirt_gap",
-    "skirt_line_count",
+    # cooling
+    "cool_fan_full_layer",
 
     # support
     "support_enable",
 
     # adhesion
     "adhesion_type",
+    "skirt_gap",
+    "skirt_line_count",
 
     # material
+    "material_bed_temperature",
+    "material_bed_temperature_layer_0",
     "material_print_temperature",
     "material_print_temperature_layer_0",
     "material_standby_temperature",

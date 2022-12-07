@@ -23,10 +23,10 @@
             "default_value": 1
         },
         "machine_extruder_start_code": {
-            "default_value": ""
+            "default_value": "M2000 S200 V250 A6000"
         },
         "machine_extruder_end_code": {
-            "default_value": "G0 F10000 X342"
+            "default_value": ""
         }
     }
 }
