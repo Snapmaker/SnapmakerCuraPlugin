@@ -4,6 +4,7 @@ from typing import Optional
 
 from UM.Application import Application
 from UM.Extension import Extension
+from UM.Logger import Logger
 from UM.PluginRegistry import PluginRegistry
 from UM.Resources import Resources
 
@@ -92,5 +93,6 @@ class SnapmakerJ1Plugin(Extension):
         if not self.__shouldUpdateResources():
             return
 
+        Logger.info("Preparing profiles for Snapmaker J1...")
         self.__updateMachineProfiles()
         self.__updateMaterials()
