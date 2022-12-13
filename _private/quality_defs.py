@@ -70,7 +70,7 @@ IGNORED_QUALITY_KEYS = {
 
 # We use a unified quality keys to ensure every quality instances share
 # the same key set. Thus we won't miss something when modifying them.
-QUALITY_KEYS = [
+GLOBAL_PARAMETERS = [
     # layer height
     "layer_height",
     "layer_height_0",
@@ -108,14 +108,6 @@ QUALITY_KEYS = [
     "travel_avoid_distance",
     "travel_avoid_supports",
     "travel_avoid_other_parts",
-    "retraction_combing",  # =no_outer_surfaces, at least for J1
-    "retraction_speed",
-    "retraction_amount",
-    "retraction_count_max",
-    "retraction_extrusion_window",
-    "retraction_hop_enabled",
-    "retraction_hop_only_when_collides",
-    "retract_at_layer_change",
 
     # z seam
     "z_seam_type",
@@ -178,13 +170,23 @@ QUALITY_KEYS = [
     "minimum_interface_area",
 
     # material
-    "material_bed_temperature",
-    "material_bed_temperature_layer_0",
-    "material_print_temperature",
-    "material_print_temperature_layer_0",
-    "material_standby_temperature",
-    "material_initial_print_temperature",
-    "material_final_print_temperature",
+    # we should not set material parameters in global profile, leave them to material definition
+    # "material_bed_temperature",
+    # "material_bed_temperature_layer_0",
+    # "material_print_temperature",
+    # "material_print_temperature_layer_0",
+    # "material_standby_temperature",
+    # "material_initial_print_temperature",
+    # "material_final_print_temperature",
+
+    # "retraction_amount",
+    "retraction_combing",  # =no_outer_surfaces, at least for J1
+    "retraction_count_max",
+    "retraction_extrusion_window",
+    "retraction_hop_enabled",
+    "retraction_hop_only_when_collides",
+    # "retraction_speed",
+    "retract_at_layer_change",
 
     # dual
     "prime_tower_enable",
@@ -202,15 +204,13 @@ QUALITY_KEYS = [
     "slicing_tolerance",  # default middle, we use inclusive
 ]
 
-EXTRUDER_QUALITY_KEYS = [
+# Extruder parameters are ones that set to specific extruder based on extruder's
+#   1. variant
+#   2. material type
+EXTRUDER_PARAMETERS = [
     "initial_layer_line_width_factor",
     "travel_avoid_distance",
     "travel_avoid_supports",
-    "retraction_amount",
-    "retraction_speed",
-    "retraction_hop_enabled",
-    "retraction_hop_only_when_collides",
-    "retract_at_layer_change",
     "skirt_brim_speed",
 
     # wall
@@ -247,13 +247,19 @@ EXTRUDER_QUALITY_KEYS = [
     "skirt_line_count",
 
     # material
-    "material_bed_temperature",
-    "material_bed_temperature_layer_0",
-    "material_print_temperature",
-    "material_print_temperature_layer_0",
-    "material_standby_temperature",
-    "material_initial_print_temperature",
-    "material_final_print_temperature",
+    # "material_bed_temperature",
+    # "material_bed_temperature_layer_0",
+    # "material_print_temperature",
+    # "material_print_temperature_layer_0",
+    # "material_standby_temperature",
+    # "material_initial_print_temperature",
+    # "material_final_print_temperature",
+
+    # "retraction_amount",
+    "retraction_hop_enabled",
+    "retraction_hop_only_when_collides",
+    # "retraction_speed",
+    "retract_at_layer_change",
 
     # dual
     "prime_tower_enable",

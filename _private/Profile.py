@@ -4,7 +4,7 @@ import logging
 from configparser import ConfigParser
 from collections import OrderedDict
 
-from .quality_defs import QUALITY_KEYS, EXTRUDER_QUALITY_KEYS, IGNORED_QUALITY_KEYS
+from .quality_defs import GLOBAL_PARAMETERS, EXTRUDER_PARAMETERS, IGNORED_QUALITY_KEYS
 
 
 class InvalidProfileException(Exception):
@@ -128,7 +128,7 @@ class Profile:
         parser.add_section("values")
         value_section = parser["values"]
 
-        keys = QUALITY_KEYS if self._is_global else EXTRUDER_QUALITY_KEYS
+        keys = GLOBAL_PARAMETERS if self._is_global else EXTRUDER_PARAMETERS
 
         for key in keys:
             if key in self._values:
@@ -152,7 +152,7 @@ class Profile:
                 continue
 
             # limit for not global keys
-            if not self._is_global and key not in EXTRUDER_QUALITY_KEYS:
+            if not self._is_global and key not in EXTRUDER_PARAMETERS:
                 continue
 
             if key not in self._values:
