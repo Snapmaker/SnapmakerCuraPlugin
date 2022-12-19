@@ -4,8 +4,8 @@
 
 Features:
 
-- Add Snapmaker J1 machine definitions and quality configurations.
-- Add Snapmaker Breakaway Support material.
+- Add Snapmaker J1 machine definition and quality configurations.
+- Add Snapmaker branded materials (including Breakaway Support material).
 - Be able to export Snapmaker J1 G-code file format (with headers for J1).
 - Auto detection networked Snapmaker J1, and send G-code to the machine.
 
@@ -23,13 +23,29 @@ Wait for approval...
 - Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*, copy downloaded plugin folder to `plugins` directory.
 - Re-start Cura.
 
-## Use Snapmaker Breakaway material
+## Add Snapmaker J1 printer
 
-After installed the plugin, created a Snapmaker J1 printer in Cura, you should
-be able to see there are 2 extruders on top the window.
+Navigate through application menu, **Settings** > **Printers** > **Add Printer...**
 
-To use **Snapmaker Breakaway** material, tap the extruder selector, in the
-extruder dialog, choose material > *Snapmaker* > *Breakaway* > *Breakaway Support*.
+In the popup window "Add Printer", select "Add a non-networked printer". Scroll down the available printers to find `Snapmaker` brand, check "Snapmaker J1" option and click "Add". A new "Snapmaker J1" printer should be added successfully.
+
+<img width="744" alt="Add Snapmaker J1 printer" src="https://user-images.githubusercontent.com/3749551/208425647-c568fbbd-d910-426d-b2e7-7fcf4d4c5489.png">
+
+Note that there are several ways in Cura to add a printer, we only cover one in our documentation.
+
+## Use Snapmaker materials
+
+We pre-defined several material under the brand `Snapmaker`, including PLA, ABS, PETG, TPU, PVA and Breakaway.
+
+Pre-defined materials usually has printing temperatures and retraction parameters well tuned by the manufacturer. You can assign them to extruder and use them directly.
+
+Take **Breakaway** material for example, you can tap the extruder selector, in the extruder dialog, choose **Material** > **Snapmaker** > **Breakaway** > **Breakaway Support** to use it.
+
+## Print via network printer
+
+Have your models sliced, you can either export the G-code to local file, or send it to a networked Snapmaker J1:
+
+<img width="360" alt="image" src="https://user-images.githubusercontent.com/3749551/208425792-13a6bf7d-a1e9-408a-a6ec-f1e3f019cc20.png">
 
 ## Other languages
 
