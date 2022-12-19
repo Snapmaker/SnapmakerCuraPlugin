@@ -184,6 +184,10 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
     def start(self) -> None:
         # check for current global container
         global_stack = Application.getInstance().getGlobalContainerStack()
+        if global_stack is None:
+            # First time launch, global stack could be None
+            return
+
         machine_name = global_stack.getProperty("machine_name", "value")
         if not machine_name.startswith(MACHINE_NAME):
             return
