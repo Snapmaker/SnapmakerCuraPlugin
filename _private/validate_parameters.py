@@ -28,7 +28,8 @@ def validate_global_quality_values(profile: Profile) -> None:
     for key in GLOBAL_PARAMETERS:
         if key not in keys:
             logging.warning("key {} is missing in profile".format(key))
-            raise InvalidProfileException()
+            profile.values[key] = 'TBD'
+            # raise InvalidProfileException()
 
 
 def validate_extruder_quality_values(profile: Profile) -> None:
