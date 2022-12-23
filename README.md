@@ -7,18 +7,29 @@ Features:
 - Add Snapmaker J1 machine definition and quality configurations.
 - Add Snapmaker branded materials (including Breakaway Support material).
 - Be able to export Snapmaker J1 G-code file format (with headers for J1).
-- Auto detection networked Snapmaker J1, and send G-code to the machine.
+- Detect networked Snapmaker J1, and send G-code to the machine.
+
+## Before installing the plugin
+
+Before installing the plugin, make sure you have Cura >= 5 installed.
+
+When you first launch Cura, user guide may ask you to add a printer. You can add a offline printer, say "Ultimaker S5" for now.
+
+You will be able to add Snapmaker J1 printer with plugin installed.
 
 ## How to Install (Marketplace)
 
 Wait for approval...
 
-## How to Install (Manually)
+## How to Install (Drag and Drop, curapackage release)
 
-- Install Cura 5.
-  (When you first launch Cura, user guide may ask you to add a printer. You can add a offline printer, say "Ultimaker S5" for now.
-  You will be able to add Snapmaker J1 printer with plugin installed.)
-- Download `SnapmakerJ1CuraPlugin` in [release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
+- Download `SnapmakerJ1CuraPlugin-{latest version}.curapackage` in [latest release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
+- Drag and drop downloaded ".curapackage" file into Cura window.
+- Re-start Cura.
+
+## How to Install (Manually, zip release)
+
+- Download `Source code (zip)` in [latest release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases).
 - Unzip downloaded plugin, rename the folder name to "SnapmakerJ1CuraPlugin" (if it has a version suffix).
 - Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*, copy downloaded plugin folder to `plugins` directory.
 - Re-start Cura.

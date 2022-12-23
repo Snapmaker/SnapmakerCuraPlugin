@@ -82,6 +82,9 @@ GLOBAL_PARAMETERS = [
     "optimize_wall_printing_order",
     "wall_overhang_angle",
     "wall_overhang_speed_factor",
+    # z seam
+    "z_seam_type",
+    "z_seam_corner",
 
     # top/bottom
     "bottom_layers",
@@ -91,10 +94,12 @@ GLOBAL_PARAMETERS = [
     "top_bottom_pattern",
     # "top_bottom_pattern_0",
     "initial_layer_line_width_factor",
+    "skin_overlap",
 
     # infill
     "infill_pattern",  # triangle
     "infill_sparse_density",
+    "infill_overlap",
 
     # bridge
     "bridge_settings_enabled",
@@ -108,9 +113,6 @@ GLOBAL_PARAMETERS = [
     "travel_avoid_distance",
     "travel_avoid_supports",
     "travel_avoid_other_parts",
-
-    # z seam
-    "z_seam_type",
 
     # speed
     "speed_slowdown_layers",
