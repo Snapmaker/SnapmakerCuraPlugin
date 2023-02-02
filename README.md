@@ -19,7 +19,9 @@ You will be able to add Snapmaker J1 printer with plugin installed.
 
 ## How to Install (Marketplace)
 
-Wait for approval...
+Search "Snapmaker J1 Plugin" in Cura's marketplace (on top right corner of Cura window), and install.
+
+(Note that 0.2.0 in marketplace corresponds to 0.5.0 version on Github)
 
 ## How to Install (Drag and Drop, curapackage release)
 
