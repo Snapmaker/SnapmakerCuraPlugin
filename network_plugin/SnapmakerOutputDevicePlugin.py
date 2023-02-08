@@ -9,7 +9,8 @@ from UM.OutputDevice.OutputDevicePlugin import OutputDevicePlugin
 
 from .DiscoverSocket import DiscoverSocket
 from .SnapmakerJ1OutputDevice import SnapmakerJ1OutputDevice
-from ..config import MACHINE_NAME, is_machine_supported
+from .SnapmakerArtisanOutputDevice import SnapmakerArtisanOutputDevice
+from ..config import is_machine_supported, SNAPMAKER_J1, SNAPMAKER_ARTISAN
 
 
 class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
@@ -94,8 +95,12 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         if not device:
             Logger.info("Discovered %s printer: %s@%s",
                         self._active_machine_name, name, address)
-            device = SnapmakerJ1OutputDevice(device_id, address, properties)
-            self.getOutputDeviceManager().addOutputDevice(device)
+            if model == SNAPMAKER_J1['name']:
+                device = SnapmakerJ1OutputDevice(device_id, address, properties)
+                self.getOutputDeviceManager().addOutputDevice(device)
+            elif model == SNAPMAKER_ARTISAN['name']:
+                device = SnapmakerArtisanOutputDevice(device_id, address, properties)
+                self.getOutputDeviceManager().addOutputDevice(device)
 
     def start(self) -> None:
         if not is_machine_supported(self._active_machine_name):

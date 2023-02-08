@@ -25,10 +25,12 @@ class GCodeInfo:
         self.line_count = 0
 
 
-class SnapmakerJ1GCodeWriter(MeshWriter):
-    """GCode Writer that writes G-code in Snapmaker J1 favour.
+class SnapmakerArtisanGCodeWriter(MeshWriter):
+    """GCode Writer that writes G-code in Snapmaker Artisan favour.
 
-    - Add Snapmaker J1 specific headers and thumbnail
+    - Add Snapmaker Artisan specific headers and thumbnail
+
+    Copied from SnapmakerJ1GCodeWriter.py and modify "Printer" and "Extruder Mode" key.
     """
 
     def __init__(self) -> None:
@@ -140,10 +142,10 @@ class SnapmakerJ1GCodeWriter(MeshWriter):
             ";Header Start",
             ";Version:1",
             ";Slicer:CuraEngine",
-            ";Printer:Snapmaker J1",
+            ";Printer:Snapmaker Artisan",
             ";Estimated Print Time:{}".format(estimated_time),
             ";Lines:{}".format(gcode_info.line_count if gcode_info else 0),
-            ";Extruder Mode:IDEX Full Control",
+            ";Extruder Mode:Normal",
         ]
 
         for extruder in global_stack.extruderList:

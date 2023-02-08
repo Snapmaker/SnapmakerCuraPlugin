@@ -6,7 +6,8 @@ from UM.FileHandler.WriteFileJob import WriteFileJob
 from UM.Mesh.MeshWriter import MeshWriter
 from UM.Message import Message
 
-from ..gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
+from ..gcode_writer.SnapmakerArtisanGCodeWriter import \
+    SnapmakerArtisanGCodeWriter
 from .SACPNetworkedPrinterOutputDevice import SACPNetworkedPrinterOutputDevice
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     from UM.Scene.SceneNode import SceneNode
 
 
-class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
+class SnapmakerArtisanOutputDevice(SACPNetworkedPrinterOutputDevice):
 
     def requestWrite(self, nodes: List["SceneNode"], file_name: Optional[str] = None,
                      limit_mimetypes: bool = False, file_handler: Optional["FileHandler"] = None,
@@ -37,8 +38,8 @@ class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
 
         self._stream = StringIO()  # create a new io stream
 
-        job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream,
-                           nodes, MeshWriter.OutputMode.TextMode)
+        job = WriteFileJob(SnapmakerArtisanGCodeWriter(),
+                           self._stream, nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)
         job.setMessage(message)
         job.start()
