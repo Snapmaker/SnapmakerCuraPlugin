@@ -17,20 +17,9 @@ def get_parameter_definitions() -> ParameterDefinitions:
 
     return parameter_definitions
 
-
-def main():
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("Checking quality files...")
-
-    parameter_definitions = get_parameter_definitions()
-    logging.info("%s parameters in total", len(parameter_definitions.parameters))
-
-    plugin_profile_root_dir = os.path.join("resources", "snapmaker_j1_profiles")
-    plugin_profile_root_dir = os.path.abspath(plugin_profile_root_dir)
-    plugin_quality_dir = os.path.join(plugin_profile_root_dir, "quality", "snapmaker_j1")
-
-    for filename in os.listdir(plugin_quality_dir):
-        quality_path = os.path.join(plugin_quality_dir, filename)
+def check_quality_dir(quality_dir: str) -> None:
+    for filename in os.listdir(quality_dir):
+        quality_path = os.path.join(quality_dir, filename)
 
         logging.info("Processing quality file: %s", quality_path)
         with open(quality_path, "r") as f:
@@ -52,7 +41,29 @@ def main():
             serialized = profile.serialize()
             f.write(serialized)
 
-        logging.info("Processing finished.")
+
+def main():
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info("Checking quality files...")
+
+    parameter_definitions = get_parameter_definitions()
+    logging.info("%s parameters in total", len(parameter_definitions.parameters))
+
+    logging.info("Checking Snapmaker J1...")
+
+    plugin_profile_root_dir = os.path.join("resources", "snapmaker_j1_profiles")
+    plugin_profile_root_dir = os.path.abspath(plugin_profile_root_dir)
+    plugin_quality_dir = os.path.join(plugin_profile_root_dir, "quality", "snapmaker_j1")
+
+    check_quality_dir(plugin_quality_dir)
+
+    logging.info("Checking Snapmaker Artisan...")
+
+    plugin_profile_root_dir = os.path.join("resources", "snapmaker_artisan")
+    plugin_profile_root_dir = os.path.abspath(plugin_profile_root_dir)
+    plugin_quality_dir = os.path.join(plugin_profile_root_dir, "quality", "snapmaker_artisan")
+
+    check_quality_dir(plugin_quality_dir)
 
     logging.info("Done.")
 

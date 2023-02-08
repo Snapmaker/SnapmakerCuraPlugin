@@ -1,6 +1,6 @@
 from UM.FileHandler.FileWriter import FileWriter
 
-from .SnapmakerJ1Plugin import SnapmakerJ1Plugin
+from .settings_plugin.SnapmakerSettingsPlugin import SnapmakerSettingsPlugin
 from .gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
 from .network.SnapmakerOutputDevicePlugin import SnapmakerOutputDevicePlugin
 
@@ -19,8 +19,14 @@ def getMetaData():
 
 
 def register(app):
+    """Register plugins."""
     return {
-        "extension": SnapmakerJ1Plugin(),
+        # Extends Snapmaker related settings
+        "extension": SnapmakerSettingsPlugin(),
+
+        # Writer to write Snapmaker J1 specific G-code
         "mesh_writer": SnapmakerJ1GCodeWriter(),
+
+        # Treat networked printers as output devices
         "output_device": SnapmakerOutputDevicePlugin(),
     }

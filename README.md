@@ -1,13 +1,13 @@
-# Snapmaker J1 Cura Plugin
+# Snapmaker Cura Plugin
 
-[Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1.
+[Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1 & Snapmaker Artisan.
 
 Features:
 
-- Add Snapmaker J1 machine definition and quality configurations.
+- Add machine definitions and quality profiles for Snapmaker 3D printers (Snapmaker J1 & Snapmaker Artisan).
 - Add Snapmaker branded materials (including Breakaway Support material).
-- Be able to export Snapmaker J1 G-code file format (with headers for J1).
-- Detect networked Snapmaker J1, and send G-code to the machine.
+- Be able to export Snapmaker favoured G-code file format (with informative headers).
+- Detect networked printers, and send G-code to the machine.
 
 ## Before installing the plugin
 
@@ -19,13 +19,13 @@ You will be able to add Snapmaker J1 printer with plugin installed.
 
 ## How to Install (Marketplace)
 
-Search "Snapmaker J1 Plugin" in Cura's marketplace (on top right corner of Cura window), and install.
+~~Search "Snapmaker Plugin" in Cura's marketplace (on top right corner of Cura window), and install.~~
 
-(Note that 0.2.0 in marketplace corresponds to 0.5.0 version on Github)
+(Wait for plugin approval by Ultimaker Team)
 
 ## How to Install (Drag and Drop, curapackage release)
 
-- Download `SnapmakerJ1CuraPlugin-{latest version}.curapackage` in [latest release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
+- Download `SnapmakerPlugin-{latest version}.curapackage` in [latest release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
 - Drag and drop downloaded ".curapackage" file into Cura window.
 - Re-start Cura.
 

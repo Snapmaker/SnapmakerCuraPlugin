@@ -9,10 +9,16 @@ from UM.PluginRegistry import PluginRegistry
 from UM.Resources import Resources
 
 from cura.CuraApplication import CuraApplication
-from .PluginPreferences import PluginPreferences
+from ..PluginPreferences import PluginPreferences
 
 
-class SnapmakerJ1Plugin(Extension):
+class SnapmakerSettingsPlugin(Extension):
+    """Plugin that install Snapmaker profiles into Cura.
+    
+    Profiles for printers:
+    - Snapmaker J1
+    - Snapmaker Artisan
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -51,33 +57,40 @@ class SnapmakerJ1Plugin(Extension):
 
         return False
 
-    def __updateMachineProfiles(self) -> None:
-        plugin_profile_root_folder = os.path.join(self._plugin_path, "resources", "snapmaker_j1_profiles")
-        plugin_machine_folder = os.path.join(plugin_profile_root_folder, "definitions")
-        plugin_extruder_folder = os.path.join(plugin_profile_root_folder, "extruders")
-        plugin_quality_folder = os.path.join(plugin_profile_root_folder, "quality")
+    def __installMachineSettings(self, machine_dirname: str) -> None:
+        """Intall specific machine settings.
+        
+        @param machine_dirname: The directory name of the machine resources.
+        """
+        machine_settings_dir = os.path.join(self._plugin_path, "resources", machine_dirname)
+        plugin_machine_dir = os.path.join(machine_settings_dir, "definitions")
+        plugin_extruder_dir = os.path.join(machine_settings_dir, "extruders")
+        plugin_quality_dir = os.path.join(machine_settings_dir, "quality")
 
         definition_dir = Resources.getStoragePath(Resources.DefinitionContainers)
         extruder_dir = Resources.getStoragePath(CuraApplication.ResourceTypes.ExtruderStack)
         quality_dir = Resources.getStoragePath(CuraApplication.ResourceTypes.QualityInstanceContainer)
 
         # copy machine definitions
-        for filename in os.listdir(plugin_machine_folder):
-            if filename.endswith(".def.json"):
-                file_path = os.path.join(plugin_machine_folder, filename)
-                shutil.copy2(file_path, definition_dir)
+        if os.path.exists(plugin_machine_dir):
+            for filename in os.listdir(plugin_machine_dir):
+                if filename.endswith(".def.json"):
+                    file_path = os.path.join(plugin_machine_dir, filename)
+                    shutil.copy2(file_path, definition_dir)
 
         # copy extruders
-        for filename in os.listdir(plugin_extruder_folder):
-            if filename.endswith(".def.json"):
-                file_path = os.path.join(plugin_extruder_folder, filename)
-                shutil.copy2(file_path, extruder_dir)
+        if os.path.exists(plugin_extruder_dir):
+            for filename in os.listdir(plugin_extruder_dir):
+                if filename.endswith(".def.json"):
+                    file_path = os.path.join(plugin_extruder_dir, filename)
+                    shutil.copy2(file_path, extruder_dir)
 
         # copy quality files
-        for filename in os.listdir(plugin_quality_folder):
-            file_path = os.path.join(plugin_quality_folder, filename)
-            if os.path.isdir(file_path):  # machine quality folder
-                shutil.copytree(file_path, os.path.join(quality_dir, filename), dirs_exist_ok=True)
+        if os.path.exists(plugin_quality_dir):
+            for filename in os.listdir(plugin_quality_dir):
+                file_path = os.path.join(plugin_quality_dir, filename)
+                if os.path.isdir(file_path):  # machine quality folder
+                    shutil.copytree(file_path, os.path.join(quality_dir, filename), dirs_exist_ok=True)
 
     def __updateMaterials(self) -> None:
         plugin_material_dir = os.path.join(self._plugin_path, "resources", "materials")
@@ -93,6 +106,8 @@ class SnapmakerJ1Plugin(Extension):
         if not self.__shouldUpdateResources():
             return
 
-        Logger.info("Preparing profiles for Snapmaker J1...")
-        self.__updateMachineProfiles()
+        Logger.info("Installing settings for Snapmaker printers...")
+        self.__installMachineSettings("snapmaker_j1_profiles")
+        self.__installMachineSettings("snapmaker_artisan")
         self.__updateMaterials()
+        Logger.info("Installation done.")
