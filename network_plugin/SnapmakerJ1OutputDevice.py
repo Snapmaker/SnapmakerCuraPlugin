@@ -20,7 +20,8 @@ class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
                      limit_mimetypes: bool = False, file_handler: Optional["FileHandler"] = None,
                      filter_by_machine: bool = False, **kwargs) -> None:
         if self.connectionState == ConnectionState.Busy:
-            Message(title="Unable to send request", text="Machine {} is busy".format(self.getId())).show()
+            Message(title="Unable to send request",
+                    text="Machine {} is busy".format(self.getId())).show()
             return
 
         self.writeStarted.emit(self)
@@ -36,7 +37,8 @@ class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
 
         self._stream = StringIO()  # create a new io stream
 
-        job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream, nodes, MeshWriter.OutputMode.TextMode)
+        job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream,
+                           nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)
         job.setMessage(message)
         job.start()

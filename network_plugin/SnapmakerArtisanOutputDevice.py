@@ -6,7 +6,8 @@ from UM.FileHandler.WriteFileJob import WriteFileJob
 from UM.Mesh.MeshWriter import MeshWriter
 from UM.Message import Message
 
-from ..gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
+from ..gcode_writer.SnapmakerArtisanGCodeWriter import \
+    SnapmakerArtisanGCodeWriter
 from .SACPNetworkedPrinterOutputDevice import SACPNetworkedPrinterOutputDevice
 
 if TYPE_CHECKING:
@@ -20,7 +21,8 @@ class SnapmakerArtisanOutputDevice(SACPNetworkedPrinterOutputDevice):
                      limit_mimetypes: bool = False, file_handler: Optional["FileHandler"] = None,
                      filter_by_machine: bool = False, **kwargs) -> None:
         if self.connectionState == ConnectionState.Busy:
-            Message(title="Unable to send request", text="Machine {} is busy".format(self.getId())).show()
+            Message(title="Unable to send request",
+                    text="Machine {} is busy".format(self.getId())).show()
             return
 
         self.writeStarted.emit(self)
@@ -36,7 +38,8 @@ class SnapmakerArtisanOutputDevice(SACPNetworkedPrinterOutputDevice):
 
         self._stream = StringIO()  # create a new io stream
 
-        job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream, nodes, MeshWriter.OutputMode.TextMode)
+        job = WriteFileJob(SnapmakerArtisanGCodeWriter(),
+                           self._stream, nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)
         job.setMessage(message)
         job.start()
