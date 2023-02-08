@@ -2,7 +2,7 @@ from UM.FileHandler.FileWriter import FileWriter
 
 from .settings_plugin.SnapmakerSettingsPlugin import SnapmakerSettingsPlugin
 from .gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
-from .network.SnapmakerOutputDevicePlugin import SnapmakerOutputDevicePlugin
+from .network_plugin.SnapmakerOutputDevicePlugin import SnapmakerOutputDevicePlugin
 
 
 def getMetaData():

@@ -107,7 +107,9 @@ class SnapmakerSettingsPlugin(Extension):
             return
 
         Logger.info("Installing settings for Snapmaker printers...")
+
         self.__installMachineSettings("snapmaker_j1_profiles")
         self.__installMachineSettings("snapmaker_artisan")
         self.__updateMaterials()
+
         Logger.info("Installation done.")
