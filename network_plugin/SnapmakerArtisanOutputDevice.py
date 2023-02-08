@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from UM.Scene.SceneNode import SceneNode
 
 
-class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
+class SnapmakerArtisanOutputDevice(SACPNetworkedPrinterOutputDevice):
 
     def requestWrite(self, nodes: List["SceneNode"], file_name: Optional[str] = None,
                      limit_mimetypes: bool = False, file_handler: Optional["FileHandler"] = None,
