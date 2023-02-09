@@ -1,5 +1,7 @@
 # Snapmaker Cura Plugin
 
+Note: for Snapamker J1 Cura Plugin, visit branch `branch-j1` [Link](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/tree/branch-j1)
+
 [Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1 & Snapmaker Artisan.
 
 Features:
@@ -15,13 +17,11 @@ Before installing the plugin, make sure you have Cura >= 5 installed.
 
 When you first launch Cura, user guide may ask you to add a printer. You can add a offline printer, say "Ultimaker S5" for now.
 
-You will be able to add Snapmaker J1 printer with plugin installed.
+You will be able to add Snapmaker printers with plugin installed.
 
 ## How to Install (Marketplace)
 
-~~Search "Snapmaker Plugin" in Cura's marketplace (on top right corner of Cura window), and install.~~
-
-(Wait for plugin approval by Ultimaker Team)
+Search "Snapmaker Plugin" in Cura's marketplace (on top right corner of Cura window), and install.
 
 ## How to Install (Drag and Drop, curapackage release)
 
