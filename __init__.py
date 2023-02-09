@@ -1,7 +1,7 @@
 from UM.FileHandler.FileWriter import FileWriter
 
 from .settings_plugin.SnapmakerSettingsPlugin import SnapmakerSettingsPlugin
-from .gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
+from .gcode_writer.SnapmakerGCodeWriter import SnapmakerGCodeWriter
 from .network_plugin.SnapmakerOutputDevicePlugin import SnapmakerOutputDevicePlugin
 
 
@@ -10,7 +10,7 @@ def getMetaData():
         "mesh_writer": {
             "output": [{
                 "extension": "gcode",
-                "description": "Snapmaker J1 G-code File",
+                "description": "Snapmaker Flavor G-code File",
                 "mime_type": "text/x-gcode",
                 "mode": FileWriter.OutputMode.TextMode,
             }]
@@ -25,7 +25,7 @@ def register(app):
         "extension": SnapmakerSettingsPlugin(),
 
         # Writer to write Snapmaker J1 specific G-code
-        "mesh_writer": SnapmakerJ1GCodeWriter(),
+        "mesh_writer": SnapmakerGCodeWriter(),
 
         # Treat networked printers as output devices
         "output_device": SnapmakerOutputDevicePlugin(),

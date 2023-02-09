@@ -6,7 +6,7 @@ from UM.FileHandler.WriteFileJob import WriteFileJob
 from UM.Mesh.MeshWriter import MeshWriter
 from UM.Message import Message
 
-from ..gcode_writer.SnapmakerJ1GCodeWriter import SnapmakerJ1GCodeWriter
+from ..gcode_writer.SnapmakerGCodeWriter import SnapmakerGCodeWriter
 from .SACPNetworkedPrinterOutputDevice import SACPNetworkedPrinterOutputDevice
 
 if TYPE_CHECKING:
@@ -37,8 +37,10 @@ class SnapmakerJ1OutputDevice(SACPNetworkedPrinterOutputDevice):
 
         self._stream = StringIO()  # create a new io stream
 
-        job = WriteFileJob(SnapmakerJ1GCodeWriter(), self._stream,
-                           nodes, MeshWriter.OutputMode.TextMode)
+        writer = SnapmakerGCodeWriter()
+        writer.setExtruderMode("IDEX Full Control")  # only support IDEX Full Control in Cura
+
+        job = WriteFileJob(writer, self._stream, nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)
         job.setMessage(message)
         job.start()

@@ -25,14 +25,19 @@ class GCodeInfo:
         self.line_count = 0
 
 
-class SnapmakerJ1GCodeWriter(MeshWriter):
-    """GCode Writer that writes G-code in Snapmaker J1 favour.
+class SnapmakerGCodeWriter(MeshWriter):
+    """GCode Writer that writes G-code in Snapmaker favour.
 
-    - Add Snapmaker J1 specific headers and thumbnail
+    - Add Snapmaker specific headers and thumbnail
     """
 
     def __init__(self) -> None:
         super().__init__(add_to_recent_files=True)
+
+        self._extruder_mode = "Normal"
+    
+    def setExtruderMode(self, extruder_mode: str) -> None:
+        self._extruder_mode = extruder_mode
 
     def write(self, stream, node, mode=FileWriter.OutputMode.BinaryMode) -> None:
         """Writes the G-code for the entire scene to a stream.
@@ -133,6 +138,8 @@ class SnapmakerJ1GCodeWriter(MeshWriter):
         global_stack = CuraApplication.getInstance().getGlobalContainerStack()
         scene = CuraApplication.getInstance().getController().getScene()
 
+        machine_name = global_stack.getProperty("machine_name", "value")
+
         # convert Duration to int
         estimated_time = int(print_info.currentPrintTime)
 
@@ -140,10 +147,10 @@ class SnapmakerJ1GCodeWriter(MeshWriter):
             ";Header Start",
             ";Version:1",
             ";Slicer:CuraEngine",
-            ";Printer:Snapmaker J1",
+            ";Printer:{}".format(machine_name),
             ";Estimated Print Time:{}".format(estimated_time),
             ";Lines:{}".format(gcode_info.line_count if gcode_info else 0),
-            ";Extruder Mode:IDEX Full Control",
+            ";Extruder Mode:{}".format(self._extruder_mode),
         ]
 
         for extruder in global_stack.extruderList:
