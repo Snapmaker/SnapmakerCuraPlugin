@@ -1,0 +1,22 @@
+{
+    "name": "Snapmaker 2 A350 Dual Extruder",
+    "version": 2,
+    "inherits": "snapmaker_2_dual_extruder",
+    "metadata": {
+        "visible": true
+    },
+    "overrides": {
+        "machine_name": {
+            "default_value": "Snapmaker 2.0 A350 Dual Extruder"
+        },
+        "machine_width": {
+            "default_value": 310
+        },
+        "machine_depth": {
+            "default_value": 330
+        },
+        "machine_height": {
+            "default_value": 290
+        }
+    }
+}
