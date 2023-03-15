@@ -59,9 +59,12 @@ class DiscoverSocket:
             self._socket.writeDatagram(
                 message, self._broadcast_address, DISCOVER_PORT)
         else:
-            self._socket.sendto(
-                message, (self._broadcast_address.toString(), DISCOVER_PORT))
-            self._collect_timer.start()
+            try:
+                self._socket.sendto(
+                    message, (self._broadcast_address.toString(), DISCOVER_PORT))
+                self._collect_timer.start()
+            except (OSError, socket.timeout):
+                pass
 
     def abort(self) -> None:
         if not self._socket:
