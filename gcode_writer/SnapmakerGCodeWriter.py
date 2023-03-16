@@ -11,13 +11,11 @@ from UM.Mesh.MeshWriter import MeshWriter
 from UM.Scene.Iterator.DepthFirstIterator import DepthFirstIterator
 from UM.i18n import i18nCatalog
 
-from cura.Settings.ExtruderManager import ExtruderManager
 from cura.CuraApplication import CuraApplication
+from cura.Settings.ExtruderManager import ExtruderManager
 from cura.Snapshot import Snapshot
 from cura.Utils.Threading import call_on_qt_thread
-
 from ..config import SNAPMAKER_DISCOVER_MACHINES
-
 
 catalog = i18nCatalog("cura")
 
@@ -249,7 +247,7 @@ class SnapmakerGCodeWriter(MeshWriter):
         print_info = CuraApplication.getInstance().getPrintInformation()
         global_stack = CuraApplication.getInstance().getGlobalContainerStack()
 
-        # machine_name = global_stack.getProperty("machine_name", "value")
+        machine_name = global_stack.getProperty("machine_name", "value")
 
         # convert Duration to int
         estimated_time = int(print_info.currentPrintTime)
@@ -267,13 +265,12 @@ class SnapmakerGCodeWriter(MeshWriter):
             ";estimated_time(s): {:.02f}".format(estimated_time),
             ";nozzle_temperature(°C): {:.0f}".format(print_temp),
             ";build_plate_temperature(°C): {:.0f}".format(bed_temp),
-            ";work_speed(mm/minute): %.0f: {:.0f}".format(print_speed),
+            ";work_speed(mm/minute): {:.0f}".format(print_speed),
 
             # keys for Version 1
-            # ";Processor:SnapmakerPlugin",
             # ";Version:0",
             # ";Slicer:CuraEngine",
-            # ";Printer:{}".format(machine_name),
+            ";Printer:{}".format(machine_name),
             # ";Estimated Print Time:{}".format(estimated_time),
             # ";Lines:{}".format(gcode_info.line_count if gcode_info else 0),
             # ";Extruder Mode:{}".format(self._extruder_mode),
@@ -282,12 +279,12 @@ class SnapmakerGCodeWriter(MeshWriter):
         if gcode_info and gcode_info.bbox.isValid():
             bbox = gcode_info.bbox
             headers.extend([
-                ";MINX: {}".format(bbox.minimum.x),
-                ";MINY: {}".format(bbox.minimum.y),
-                ";MINZ: {}".format(bbox.minimum.z),
-                ";MAXX: {}".format(bbox.maximum.x),
-                ";MAXY: {}".format(bbox.maximum.y),
-                ";MAXZ: {}".format(bbox.maximum.z),
+                ";min_x(mm): {}".format(bbox.minimum.x),
+                ";min_y(mm): {}".format(bbox.minimum.y),
+                ";min_z(mm): {}".format(bbox.minimum.z),
+                ";max_x(mm): {}".format(bbox.maximum.x),
+                ";max_y(mm): {}".format(bbox.maximum.y),
+                ";max_z(mm): {}".format(bbox.maximum.z),
             ])
 
         thumbnail = self.__generateThumbnail()
