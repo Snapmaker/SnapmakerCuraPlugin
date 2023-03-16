@@ -110,6 +110,7 @@ class SnapmakerSettingsPlugin(Extension):
 
         self.__installMachineSettings("snapmaker_j1_profiles")
         self.__installMachineSettings("snapmaker_artisan")
+        self.__installMachineSettings("snapmaker_2_dual_extruder")
         self.__updateMaterials()
 
         Logger.info("Installation done.")

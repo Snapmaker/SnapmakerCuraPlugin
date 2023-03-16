@@ -1,0 +1,22 @@
+{
+    "name": "Snapmaker 2 A150 Dual Extruder",
+    "version": 2,
+    "inherits": "snapmaker_2_dual_extruder",
+    "metadata": {
+        "visible": true
+    },
+    "overrides": {
+        "machine_name": {
+            "default_value": "Snapmaker 2.0 A150 Dual Extruder"
+        },
+        "machine_width": {
+            "default_value": 145
+        },
+        "machine_depth": {
+            "default_value": 145
+        },
+        "machine_height": {
+            "default_value": 110
+        }
+    }
+}
