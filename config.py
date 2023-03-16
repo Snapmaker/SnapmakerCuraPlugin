@@ -1,29 +1,31 @@
-# Machine name, or machine series
-MACHINE_NAME = "Snapmaker J1"
-
-SNAPMAKER_J1 = dict(
-    name="Snapmaker J1",
-    model="Snapmaker J1",
-)
-
-SNAPMAKER_ARTISAN = dict(
-    name="Snapmaker Artisan",
-    model="Snapmaker Artisan",
-)
-
 SNAPMAKER_2_A150_DUAL_EXTRUDER = dict(
     name="Snapmaker 2.0 A150 Dual Extruder",
     model="Snapmaker 2 Model A150",
+    header_version=0,  # default is 1
 )
 
 SNAPMAKER_2_A250_DUAL_EXTRUDER = dict(
     name="Snapmaker 2.0 A250 Dual Extruder",
     model="Snapmaker 2 Model A250",
+    header_version=0,
 )
 
 SNAPMAKER_2_A350_DUAL_EXTRUDER = dict(
     name="Snapmaker 2.0 A350 Dual Extruder",
     model="Snapmaker 2 Model A350",
+    header_version=0,
+)
+
+SNAPMAKER_J1 = dict(
+    name="Snapmaker J1",
+    model="Snapmaker J1",
+    header_version=1,  # default is 1
+)
+
+SNAPMAKER_ARTISAN = dict(
+    name="Snapmaker Artisan",
+    model="Snapmaker Artisan",
+    header_version=1,
 )
 
 SNAPMAKER_DISCOVER_MACHINES = [

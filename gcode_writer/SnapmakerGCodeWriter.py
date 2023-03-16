@@ -1,18 +1,23 @@
 import base64
 from typing import List
 
-from cura.CuraApplication import CuraApplication
-from cura.Snapshot import Snapshot
-from cura.Utils.Threading import call_on_qt_thread
 from PyQt6.QtCore import QBuffer
 from UM.Application import Application
 from UM.FileHandler.FileWriter import FileWriter
-from UM.i18n import i18nCatalog
 from UM.Logger import Logger
 from UM.Math.AxisAlignedBox import AxisAlignedBox
 from UM.Math.Vector import Vector
 from UM.Mesh.MeshWriter import MeshWriter
 from UM.Scene.Iterator.DepthFirstIterator import DepthFirstIterator
+from UM.i18n import i18nCatalog
+
+from cura.Settings.ExtruderManager import ExtruderManager
+from cura.CuraApplication import CuraApplication
+from cura.Snapshot import Snapshot
+from cura.Utils.Threading import call_on_qt_thread
+
+from ..config import SNAPMAKER_DISCOVER_MACHINES
+
 
 catalog = i18nCatalog("cura")
 
@@ -35,9 +40,20 @@ class SnapmakerGCodeWriter(MeshWriter):
         super().__init__(add_to_recent_files=True)
 
         self._extruder_mode = "Normal"
-    
+        self._header_version = 1
+
     def setExtruderMode(self, extruder_mode: str) -> None:
         self._extruder_mode = extruder_mode
+
+    def __detectHeaderVersion(self):
+        global_stack = CuraApplication.getInstance().getGlobalContainerStack()
+        machine_name = global_stack.getProperty("machine_name", "value")
+
+        for machine in SNAPMAKER_DISCOVER_MACHINES:
+            if machine['name'] == machine_name:
+                break
+
+        self._header_version = machine.get('header_version', 1) if machine else 1
 
     def write(self, stream, node, mode=FileWriter.OutputMode.BinaryMode) -> None:
         """Writes the G-code for the entire scene to a stream.
@@ -129,6 +145,14 @@ class SnapmakerGCodeWriter(MeshWriter):
         return gcode_info
 
     def processGCodeList(self, stream, gcode_list: List[str]) -> None:
+        self.__detectHeaderVersion()
+
+        if self._header_version == 1:
+            self._processGCodeListV1(stream, gcode_list)
+        else:
+            self._processGCodeListLegacy(stream, gcode_list)
+
+    def _processGCodeListV1(self, stream, gcode_list: List[str]) -> None:
         try:
             gcode_info = self.__parseOriginalGCode(gcode_list)
         except KeyError:
@@ -190,6 +214,84 @@ class SnapmakerGCodeWriter(MeshWriter):
 
         thumbnail = self.__generateThumbnail()
         headers.append(";Thumbnail:{}".format(thumbnail))
+
+        headers.append(";Header End")
+        headers.append("")
+
+        stream.write("\n".join(headers))
+
+        for gcode in gcode_list:
+            stream.write(gcode)
+
+    def __getExtruderValue(self, key) -> str:
+        extruder_stack = ExtruderManager.getInstance().getActiveExtruderStack()
+
+        type_ = extruder_stack.getProperty(key, "type")
+        value_ = extruder_stack.getProperty(key, "value")
+
+        if str(type_) == "float":
+            value = "{:.4f}".format(value_).rstrip("0").rstrip(".")
+        else:
+            if str(type_) == "enum":
+                options_ = extruder_stack.getProperty(key, "options")
+                value = options_[str(value_)]
+            else:
+                value = str(value_)
+
+        return value
+
+    def _processGCodeListLegacy(self, stream, gcode_list: List[str]) -> None:
+        try:
+            gcode_info = self.__parseOriginalGCode(gcode_list)
+        except KeyError:
+            gcode_info = None
+
+        print_info = CuraApplication.getInstance().getPrintInformation()
+        global_stack = CuraApplication.getInstance().getGlobalContainerStack()
+
+        # machine_name = global_stack.getProperty("machine_name", "value")
+
+        # convert Duration to int
+        estimated_time = int(print_info.currentPrintTime)
+
+        print_temp = float(self.__getExtruderValue("material_print_temperature"))
+        bed_temp = float(self.__getExtruderValue("material_bed_temperature")) or 0.
+        print_speed = float(self.__getExtruderValue("speed_infill"))
+
+        headers = [
+            ";Header Start",
+
+            # legacy keys
+            ";header_type: 3dp",
+            ";file_total_lines: {}".format(gcode_info.line_count if gcode_info else 0),
+            ";estimated_time(s): {:.02f}".format(estimated_time),
+            ";nozzle_temperature(°C): {:.0f}".format(print_temp),
+            ";build_plate_temperature(°C): {:.0f}".format(bed_temp),
+            ";work_speed(mm/minute): %.0f: {:.0f}".format(print_speed),
+
+            # keys for Version 1
+            # ";Processor:SnapmakerPlugin",
+            # ";Version:0",
+            # ";Slicer:CuraEngine",
+            # ";Printer:{}".format(machine_name),
+            # ";Estimated Print Time:{}".format(estimated_time),
+            # ";Lines:{}".format(gcode_info.line_count if gcode_info else 0),
+            # ";Extruder Mode:{}".format(self._extruder_mode),
+        ]
+
+        if gcode_info and gcode_info.bbox.isValid():
+            bbox = gcode_info.bbox
+            headers.extend([
+                ";MINX: {}".format(bbox.minimum.x),
+                ";MINY: {}".format(bbox.minimum.y),
+                ";MINZ: {}".format(bbox.minimum.z),
+                ";MAXX: {}".format(bbox.maximum.x),
+                ";MAXY: {}".format(bbox.maximum.y),
+                ";MAXZ: {}".format(bbox.maximum.z),
+            ])
+
+        thumbnail = self.__generateThumbnail()
+        headers.append(";thumbnail: {}".format(thumbnail))
 
         headers.append(";Header End")
         headers.append("")
