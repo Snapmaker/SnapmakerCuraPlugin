@@ -98,7 +98,7 @@ class DiscoverSocket:
         while True:
             try:
                 msg, _ = self._socket.recvfrom(128)
-            except (TimeoutError, ConnectionError):
+            except (TimeoutError, ConnectionError, socket.timeout):
                 # normal timeout, or ConnectionError (including ConnectionAbortedError, ConnectionRefusedError,
                 # ConnectionResetError) errors raise by the peer
                 break

@@ -10,7 +10,16 @@ from UM.OutputDevice.OutputDevicePlugin import OutputDevicePlugin
 from .DiscoverSocket import DiscoverSocket
 from .SnapmakerJ1OutputDevice import SnapmakerJ1OutputDevice
 from .SnapmakerArtisanOutputDevice import SnapmakerArtisanOutputDevice
-from ..config import is_machine_supported, SNAPMAKER_J1, SNAPMAKER_ARTISAN
+from .Snapamker2OutputDevice import Snapmaker2OutputDevice
+from ..config import (
+    is_machine_discover_supported,
+    SNAPMAKER_J1,
+    SNAPMAKER_ARTISAN,
+    SNAPMAKER_2_A150_DUAL_EXTRUDER,
+    SNAPMAKER_2_A250_DUAL_EXTRUDER,
+    SNAPMAKER_2_A350_DUAL_EXTRUDER,
+    SNAPMAKER_DISCOVER_MACHINES,
+)
 
 
 class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
@@ -30,6 +39,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         self._discover_sockets = []  # type: List[DiscoverSocket]
 
         self._active_machine_name = ""
+        self._active_machine = None
 
         Application.getInstance().globalContainerStackChanged.connect(
             self._onGlobalContainerStackChanged)
@@ -68,7 +78,7 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         e.g. Snapmaker J1@172.18.0.2|model:Snapmaker J1|status:IDLE
         """
-        Logger.info("Discovered printer: %s", msg)
+        # Logger.debug("Discovered printer: %s", msg)
 
         parts = msg.split("|")
         if len(parts) < 1 or "@" not in parts[0]:
@@ -88,22 +98,31 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
 
         # only accept current active machine
         model = properties.get("model", "")
-        if model != self._active_machine_name:
+        if self._active_machine and model != self._active_machine['model']:
             return
 
         device = self.getOutputDeviceManager().getOutputDevice(device_id)
         if not device:
             Logger.info("Discovered %s printer: %s@%s",
                         self._active_machine_name, name, address)
+
             if model == SNAPMAKER_J1['name']:
+                # J1
                 device = SnapmakerJ1OutputDevice(device_id, address, properties)
                 self.getOutputDeviceManager().addOutputDevice(device)
             elif model == SNAPMAKER_ARTISAN['name']:
+                # Artisan
                 device = SnapmakerArtisanOutputDevice(device_id, address, properties)
+                self.getOutputDeviceManager().addOutputDevice(device)
+            elif model in [SNAPMAKER_2_A150_DUAL_EXTRUDER['model'],
+                           SNAPMAKER_2_A250_DUAL_EXTRUDER['model'],
+                           SNAPMAKER_2_A350_DUAL_EXTRUDER['model'], ]:
+                # Snapmaker 2.0 Dual Extruder
+                device = Snapmaker2OutputDevice(device_id, address, properties)
                 self.getOutputDeviceManager().addOutputDevice(device)
 
     def start(self) -> None:
-        if not is_machine_supported(self._active_machine_name):
+        if not is_machine_discover_supported(self._active_machine_name):
             return
 
         if not self._discover_timer.isActive():
@@ -135,11 +154,16 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         machine_name = global_stack.getProperty("machine_name", "value")
         self._active_machine_name = machine_name
 
+        for machine in SNAPMAKER_DISCOVER_MACHINES:
+            if machine['name'] == machine_name:
+                self._active_machine = machine
+                break
+
     def _onGlobalContainerStackChanged(self) -> None:
         self._updateActiveMachine()
 
         # Start timer when active machine is supported
-        if is_machine_supported(self._active_machine_name):
+        if is_machine_discover_supported(self._active_machine_name):
             self.start()
         else:
             self.stop()
