@@ -17,6 +17,7 @@ from UM.Message import Message
 from cura.PrinterOutput.NetworkedPrinterOutputDevice import \
     NetworkedPrinterOutputDevice, AuthState
 from cura.PrinterOutput.PrinterOutputDevice import ConnectionState
+from .HTTPTokenManager import HTTPTokenManager
 
 if TYPE_CHECKING:
     from UM.FileHandler.FileHandler import FileHandler
@@ -48,6 +49,8 @@ class HTTPNetworkedPrinterOutputDevice(NetworkedPrinterOutputDevice):
         # write done, cleanup
         self.writeFinished.connect(self.__onWriteFinished)
 
+        self._initToken()
+
         self._progress = PrintJobUploadProgressMessage(self)
         self._need_auth = PrintJobNeedAuthMessage(self)
 
@@ -56,6 +59,12 @@ class HTTPNetworkedPrinterOutputDevice(NetworkedPrinterOutputDevice):
         self.setShortDescription("Send to {}".format(self._address))
         self.setDescription("Send to {}".format(self.getId()))
         self.setConnectionText("Connected to {}".format(self.getId()))
+
+    def _initToken(self) -> None:
+        saved_token = HTTPTokenManager.getInstance().getToken(self.getId())
+        if saved_token:
+            self._token = saved_token
+            Logger.debug("Use saved token for device: {}".format(self.getId()))
 
     def _onConnectionStateChanged(self, id) -> None:
         if self.connectionState == ConnectionState.Connected:
@@ -202,6 +211,9 @@ class HTTPNetworkedPrinterOutputDevice(NetworkedPrinterOutputDevice):
                     if self._token != token:
                         self._token = token
 
+                        # update token
+                        HTTPTokenManager.getInstance().setToken(self.getId(), self._token)
+
                     # check status
                     self.checkStatus()
 
@@ -221,7 +233,6 @@ class HTTPNetworkedPrinterOutputDevice(NetworkedPrinterOutputDevice):
 
             # /api/v1/disconnect
             elif self._api_prefix + "/disconnect" in http_url:
-                self._token = ""
                 self.setConnectionState(ConnectionState.Closed)
 
             # /api/v1/upload
@@ -278,11 +289,11 @@ class PrintJobUploadProgressMessage(Message):
                          dismissable=False,
                          use_inactivity_timer=False)
         self._device = device
-        self._gTimer = QTimer()
-        self._gTimer.setInterval(3 * 1000)
-        self._gTimer.timeout.connect(lambda: self._heartbeat())
-        self.inactivityTimerStart.connect(self._startTimer)
-        self.inactivityTimerStop.connect(self._stopTimer)
+        self._timer = QTimer()
+        self._timer.setInterval(3 * 1000)
+        self._timer.timeout.connect(lambda: self._heartbeat())
+        self.inactivityTimerStart.connect(self._start)
+        self.inactivityTimerStop.connect(self._stop)
 
     def show(self):
         self.setProgress(0)
@@ -296,10 +307,10 @@ class PrintJobUploadProgressMessage(Message):
     def _heartbeat(self):
         self._device.checkStatus()
 
-    def _startTimer(self):
-        if self._gTimer and not self._gTimer.isActive():
-            self._gTimer.start()
+    def _start(self):
+        if self._timer and not self._timer.isActive():
+            self._timer.start()
 
-    def _stopTimer(self):
-        if self._gTimer and self._gTimer.isActive():
-            self._gTimer.stop()
+    def _stop(self):
+        if self._timer and self._timer.isActive():
+            self._timer.stop()

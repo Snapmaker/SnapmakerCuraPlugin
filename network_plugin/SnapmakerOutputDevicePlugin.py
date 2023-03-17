@@ -11,6 +11,7 @@ from .DiscoverSocket import DiscoverSocket
 from .SnapmakerJ1OutputDevice import SnapmakerJ1OutputDevice
 from .SnapmakerArtisanOutputDevice import SnapmakerArtisanOutputDevice
 from .Snapamker2OutputDevice import Snapmaker2OutputDevice
+from .HTTPTokenManager import HTTPTokenManager
 from ..config import (
     is_machine_discover_supported,
     SNAPMAKER_J1,
@@ -41,6 +42,8 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
         self._active_machine_name = ""
         self._active_machine = None
 
+        self._http_token_manager = HTTPTokenManager.getInstance()
+
         Application.getInstance().globalContainerStackChanged.connect(
             self._onGlobalContainerStackChanged)
         Application.getInstance().applicationShuttingDown.connect(self.stop)
@@ -70,6 +73,9 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
             Logger.info(
                 "Discovering networked printer... (interface: %s)", sock.address.toString())
             sock.discover(b"discover")
+
+        # save tokens
+        self._http_token_manager.saveTokens()
 
         # TODO: remove output devices that not reply message for a period of time
 
