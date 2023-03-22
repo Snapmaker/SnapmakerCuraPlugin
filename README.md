@@ -2,11 +2,11 @@
 
 Note: for Snapamker J1 Cura Plugin, visit branch `branch-j1` [Link](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/tree/branch-j1)
 
-[Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1 & Snapmaker Artisan.
+[Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1 & Snapmaker Artisan & Snapmaker 2.0 Dual Extruder.
 
 Features:
 
-- Add machine definitions and quality profiles for Snapmaker 3D printers (Snapmaker J1 & Snapmaker Artisan).
+- Add machine definitions and quality profiles for Snapmaker 3D printers (Snapmaker J1 & Snapmaker Artisan & Snapmaker 2.0 Dual Extruder).
 - Add Snapmaker branded materials (including Breakaway Support material).
 - Be able to export Snapmaker favoured G-code file format (with informative headers).
 - Detect networked printers, and send G-code to the machine.
@@ -36,11 +36,11 @@ Search "Snapmaker Plugin" in Cura's marketplace (on top right corner of Cura win
 - Start Cura applcation. Open *Help Menu* -> *Show Configuration Folder*, copy downloaded plugin folder to `plugins` directory.
 - Re-start Cura.
 
-## Add Snapmaker J1 printer
+## Add Snapmaker printer
 
 Navigate through application menu, **Settings** > **Printers** > **Add Printer...**
 
-In the popup window "Add Printer", select "Add a non-networked printer". Scroll down the available printers to find `Snapmaker` brand, check "Snapmaker J1" option and click "Add". A new "Snapmaker J1" printer should be added successfully.
+In the popup window "Add Printer", select "Add a non-networked printer". Scroll down the available printers to find `Snapmaker` brand, check "Snapmaker XXX" option and click "Add". A new "Snapmaker" printer should be added successfully.
 
 <img width="744" alt="Add Snapmaker J1 printer" src="https://user-images.githubusercontent.com/3749551/208425647-c568fbbd-d910-426d-b2e7-7fcf4d4c5489.png">
 
@@ -56,7 +56,7 @@ Take **Breakaway** material for example, you can tap the extruder selector, in t
 
 ## Print via network printer
 
-Have your models sliced, you can either export the G-code to local file, or send it to a networked Snapmaker J1:
+Have your models sliced, you can either export the G-code to local file, or send it to a networked Snapmaker machine:
 
 <img width="360" alt="image" src="https://user-images.githubusercontent.com/3749551/208425792-13a6bf7d-a1e9-408a-a6ec-f1e3f019cc20.png">
 
