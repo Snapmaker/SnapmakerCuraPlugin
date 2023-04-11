@@ -51,7 +51,7 @@ class SnapmakerGCodeWriter(MeshWriter):
             if machine['name'] == machine_name:
                 break
 
-        self._header_version = machine.get('header_version', 1) if machine else 1
+        self._header_version = machine.get('header_version', 1) if machine else -1
 
     def write(self, stream, node, mode=FileWriter.OutputMode.BinaryMode) -> None:
         """Writes the G-code for the entire scene to a stream.
@@ -147,8 +147,11 @@ class SnapmakerGCodeWriter(MeshWriter):
 
         if self._header_version == 1:
             self._processGCodeListV1(stream, gcode_list)
-        else:
+        elif self._header_version == 0:
             self._processGCodeListLegacy(stream, gcode_list)
+        else:
+            # Unsupported machine header, just use original
+            self._processGCodeListTransparent(stream, gcode_list)
 
     def _processGCodeListV1(self, stream, gcode_list: List[str]) -> None:
         try:
@@ -295,5 +298,9 @@ class SnapmakerGCodeWriter(MeshWriter):
 
         stream.write("\n".join(headers))
 
+        for gcode in gcode_list:
+            stream.write(gcode)
+
+    def _processGCodeListTransparent(self, stream, gcode_list: List[str]) -> None:
         for gcode in gcode_list:
             stream.write(gcode)

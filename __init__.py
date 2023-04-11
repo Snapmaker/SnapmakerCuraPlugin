@@ -11,7 +11,7 @@ def getMetaData():
             "output": [{
                 "extension": "gcode",
                 "description": "Snapmaker Flavor G-code File",
-                "mime_type": "text/x-gcode",
+                "mime_type": "text/x-snapmaker-gcode",
                 "mode": FileWriter.OutputMode.TextMode,
             }]
         }

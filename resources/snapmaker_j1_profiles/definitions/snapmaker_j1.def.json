@@ -5,7 +5,7 @@
     "metadata": {
         "manufacturer": "Snapmaker",
         "author": "Snapmaker",
-        "file_formats": "text/x-gcode",
+        "file_formats": "text/x-snapmaker-gcode;text/x-gcode",
         "machine_extruder_trains": {
             "0": "snapmaker_j1_extruder_0",
             "1": "snapmaker_j1_extruder_1"
@@ -48,6 +48,13 @@
         },
         "machine_end_gcode": {
             "default_value": ";--- End G-code Begin ---\nM104 S0\nM140 S0\nG92 E0\nG1 E-1 F300 ;retract the filament\n\nG92 E0\nG28 Z\nG28 X0 Y0\nM84\n;--- End G-code End ---\n"
+        },
+        "speed_infill": {
+            "maximum_value_warning": "350"
+        },
+        "retraction_amount": {
+            "default_value": 1,
+            "maximum_value_warning": "2.0"
         }
     }
 }
