@@ -60,7 +60,7 @@ Have your models sliced, you can either export the G-code to local file, or send
 
 <img width="360" alt="image" src="https://user-images.githubusercontent.com/3749551/208425792-13a6bf7d-a1e9-408a-a6ec-f1e3f019cc20.png">
 
-## Export Snapmaker
+## Export Snapmaker Flavour G-code
 
 Select `Snapmaker Flavour G-code File (*.gcode)` format to export G-code files.
 
