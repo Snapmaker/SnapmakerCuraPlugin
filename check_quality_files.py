@@ -65,6 +65,14 @@ def main():
 
     check_quality_dir(plugin_quality_dir)
 
+    logging.info("Checking Snapmaker 2.0...")
+
+    plugin_profile_root_dir = os.path.join("resources", "snapmaker_2_dual_extruder")
+    plugin_profile_root_dir = os.path.abspath(plugin_profile_root_dir)
+    plugin_quality_dir = os.path.join(plugin_profile_root_dir, "quality", "snapmaker_2_dual_extruder")
+
+    check_quality_dir(plugin_quality_dir)
+
     logging.info("Done.")
 
 
