@@ -22,7 +22,7 @@
     <setting key="heated bed temperature">65</setting>
     <setting key="standby temperature">180</setting>
     <setting key="build volume temperature">28</setting>
-    <setting key="retraction amount">1.5</setting>
+    <setting key="retraction amount">1.0</setting>
     <setting key="retraction speed">30.0</setting>
   </settings>
 </fdmmaterial>
