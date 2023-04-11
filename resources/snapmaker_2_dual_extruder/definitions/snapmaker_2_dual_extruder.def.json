@@ -5,7 +5,7 @@
     "metadata": {
         "manufacturer": "Snapmaker",
         "author": "Snapmaker",
-        "file_formats": "text/x-gcode",
+        "file_formats": "text/x-snapmaker-gcode;text/x-gcode",
         "machine_extruder_trains": {
             "0": "snapmaker_2_dual_extruder_0",
             "1": "snapmaker_2_dual_extruder_1"
