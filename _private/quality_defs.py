@@ -121,8 +121,8 @@ GLOBAL_PARAMETERS = [
     "speed_layer_0",
     # "speed_print_layer_0",  # this is set by speed_layer_0
     "speed_wall",
-    "speed_wall_0",
-    # "speed_wall_x", speed_wall_x = =speed_wall
+    # "speed_wall_0", speed_wall_0 = =speed_wall
+    "speed_wall_x",
     "speed_topbottom",
     # "speed_infill", speed_infill = =speed_print
     "speed_travel",
@@ -227,8 +227,8 @@ EXTRUDER_PARAMETERS = [
     "speed_layer_0",
     # "speed_print_layer_0",  # this is set by speed_layer_0
     "speed_wall",
-    "speed_wall_0",
-    # "speed_wall_x", speed_wall_x = =speed_wall
+    # "speed_wall_0", speed_wall_0 = =speed_wall
+    "speed_wall_x",
     "speed_topbottom",
     # "speed_infill", speed_infill = =speed_print
     "speed_travel",
