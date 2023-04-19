@@ -184,9 +184,14 @@ class SnapmakerGCodeWriter(MeshWriter):
             material = extruder.material
             temperature = extruder.getProperty("material_print_temperature", "value")
 
+            retraction_amount = extruder.getProperty("retraction_amount", "value")
+            switch_retraction_amount = extruder.getProperty("switch_extruder_retraction_amount", "value")
+
             headers.append(";Extruder {} Nozzle Size:{}".format(extruder.position, nozzle_size))
             headers.append(";Extruder {} Material:{}".format(extruder.position, material.getName()))
             headers.append(";Extruder {} Print Temperature:{}".format(extruder.position, temperature))
+            headers.append(";Extruder {} Retraction Distance:{}".format(extruder.position, retraction_amount))
+            headers.append(";Extruder {} Switch Retraction Distance:{}".format(extruder.position, switch_retraction_amount))
 
         bed_temperature = global_stack.getProperty("material_bed_temperature_layer_0", "value")
         headers.append(";Bed Temperature:{}".format(bed_temperature))
@@ -278,6 +283,21 @@ class SnapmakerGCodeWriter(MeshWriter):
             # ";Lines:{}".format(gcode_info.line_count if gcode_info else 0),
             # ";Extruder Mode:{}".format(self._extruder_mode),
         ]
+
+        for extruder in global_stack.extruderList:
+            nozzle_size = extruder.getProperty("machine_nozzle_size", "value")
+
+            material = extruder.material
+            temperature = extruder.getProperty("material_print_temperature", "value")
+
+            retraction_amount = extruder.getProperty("retraction_amount", "value")
+            switch_retraction_amount = extruder.getProperty("switch_extruder_retraction_amount", "value")
+
+            headers.append(";Extruder {} Nozzle Size:{}".format(extruder.position, nozzle_size))
+            headers.append(";Extruder {} Material:{}".format(extruder.position, material.getName()))
+            headers.append(";Extruder {} Print Temperature:{}".format(extruder.position, temperature))
+            headers.append(";Extruder {} Retraction Distance:{}".format(extruder.position, retraction_amount))
+            headers.append(";Extruder {} Switch Retraction Distance:{}".format(extruder.position, switch_retraction_amount))
 
         if gcode_info and gcode_info.bbox.isValid():
             bbox = gcode_info.bbox
