@@ -23,6 +23,8 @@ You will be able to add Snapmaker printers with plugin installed.
 
 Search "Snapmaker Plugin" in Cura's marketplace (on top right corner of Cura window), and install.
 
+**Note**: The Snapmaker plugin in marketplace is a bit outdated, it's recommended to install the `.curapackage` package from [lastest release](https://github.com/Snapmaker/SnapmakerCuraPlugin/releases).
+
 ## How to Install (Drag and Drop, curapackage release)
 
 - Download `SnapmakerPlugin-{latest version}.curapackage` in [latest release](https://github.com/Snapmaker/SnapmakerJ1CuraPlugin/releases) tab.
