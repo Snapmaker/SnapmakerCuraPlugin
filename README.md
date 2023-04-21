@@ -1,6 +1,6 @@
 # Snapmaker Cura Plugin
 
-**CAUTION: Please uninstall `Snapmaker J1 Plugin` first, and then install `Snapmaker Plugin`.**
+**CAUTION: If you have already installed the `Snapmaker J1 Plugin`, make sure that you uninstall it before installing or updating `Snapmaker Plugin`.**
 
 [Cura](https://github.com/Ultimaker/Cura) plugin that provides support for Snapmaker J1 & Snapmaker Artisan & Snapmaker 2.0 Dual Extruder.
 
