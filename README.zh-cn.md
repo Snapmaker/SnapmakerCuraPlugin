@@ -1,5 +1,7 @@
 # Snapmaker Cura Plugin
 
+**注意: 请先卸载 Snapmaker J1 Plugin, 再安装 Snapmaker Plugin。**
+
 功能特性:
 
 - 增加 Snapmaker J1 & Snapmaker Artsian & Snapmaker 2.0 双挤出模块 机型和打印质量配置。 
