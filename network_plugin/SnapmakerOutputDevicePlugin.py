@@ -74,9 +74,6 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
                 "Discovering networked printer... (interface: %s)", sock.address.toString())
             sock.discover(b"discover")
 
-        # save tokens
-        self._http_token_manager.saveTokens()
-
         # TODO: remove output devices that not reply message for a period of time
 
     def __onData(self, msg: str) -> None:
