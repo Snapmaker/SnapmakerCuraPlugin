@@ -1,11 +1,11 @@
-import json
 from typing import Union
 
 from UM.Application import Application
-from UM.Logger import Logger
+from cura.OAuth2.Models import BaseModel
+from cura.OAuth2.KeyringAttribute import KeyringAttribute
 
 
-class HTTPTokenManager:
+class HTTPTokenManager(BaseModel):
     """Manager for HTTP tokens."""
 
     PREFERENCE_KEY_TOKEN = "SnapmakerPlugin/tokens"
@@ -21,42 +21,27 @@ class HTTPTokenManager:
         return cls.instance
 
     def __init__(self) -> None:
-        self._tokens = {}  # type: Dict[str, str]
-
-        self._dirty = False
+        self._attributes = {}
 
     def loadTokens(self) -> None:
         preferences = Application.getInstance().getPreferences()
-        preferences.addPreference(self.PREFERENCE_KEY_TOKEN, "{}")
-
-        try:
-            self._tokens = json.loads(
-                preferences.getValue(self.PREFERENCE_KEY_TOKEN)
-            )
-        except ValueError:
-            # failed to parse JSON
-            self._tokens = {}
-            self._dirty = True
-
-        if not isinstance(self._tokens, dict):
-            self._tokens = {}
-            self._dirty = True
-
-    def saveTokens(self) -> None:
-        if self._dirty:
-            try:
-                preferences = Application.getInstance().getPreferences()
-                preferences.setValue(self.PREFERENCE_KEY_TOKEN, json.dumps(self._tokens))
-            except ValueError:
-                pass
-
-            self._dirty = False
+        # Remove the preference we used on earlier version (<= 0.9.0)
+        preferences.removePreference(self.PREFERENCE_KEY_TOKEN)
 
     def getToken(self, key: str) -> Union[str, None]:
-        return self._tokens.get(key, None)
+        attribute = getattr(self, key, None)  # type: Union[KeyringAttribute, None]
+        return attribute.__get__(self, type(self)) if attribute else None
 
     def setToken(self, key: str, token: str) -> None:
-        saved_token = self._tokens.get(key, "")
-        if not saved_token or token != saved_token:
-            self._tokens[key] = token
-            self._dirty = True
+        attribute = getattr(self, key, None)  # type: Union[KeyringAttribute, None]
+        if not attribute:
+            # Note that we use dynamic descriptors instead static
+            attribute = KeyringAttribute()
+            attribute.__set_name__(self, key)
+            setattr(self, key, attribute)
+
+        # It's a bit tricky to call __get__ and __set__ directly, cuz we
+        # can not call descriptor by acccess instance.attribute.
+        saved_token = attribute.__get__(self, type(self))
+        if saved_token != token:
+            attribute.__set__(self, token)

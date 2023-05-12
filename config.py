@@ -1,7 +1,25 @@
+SNAPMAKER_2_A150 = dict(
+    name="Snapmaker A150",
+    model="Snapmaker 2 Model A150",
+    header_version=0,  # default is 1
+)
+
+SNAPMAKER_2_A250 = dict(
+    name="Snapmaker A250",
+    model="Snapmaker 2 Model A250",
+    header_version=0,
+)
+
+SNAPMAKER_2_A350 = dict(
+    name="Snapmaker A350",
+    model="Snapmaker 2 Model A350",
+    header_version=0,
+)
+
 SNAPMAKER_2_A150_DUAL_EXTRUDER = dict(
     name="Snapmaker 2.0 A150 Dual Extruder",
     model="Snapmaker 2 Model A150",
-    header_version=0,  # default is 1
+    header_version=0,
 )
 
 SNAPMAKER_2_A250_DUAL_EXTRUDER = dict(
@@ -31,6 +49,9 @@ SNAPMAKER_ARTISAN = dict(
 SNAPMAKER_DISCOVER_MACHINES = [
     SNAPMAKER_J1,
     SNAPMAKER_ARTISAN,
+    SNAPMAKER_2_A150,
+    SNAPMAKER_2_A250,
+    SNAPMAKER_2_A350,
     SNAPMAKER_2_A150_DUAL_EXTRUDER,
     SNAPMAKER_2_A250_DUAL_EXTRUDER,
     SNAPMAKER_2_A350_DUAL_EXTRUDER,

@@ -16,6 +16,9 @@ from ..config import (
     is_machine_discover_supported,
     SNAPMAKER_J1,
     SNAPMAKER_ARTISAN,
+    SNAPMAKER_2_A150,
+    SNAPMAKER_2_A250,
+    SNAPMAKER_2_A350,
     SNAPMAKER_2_A150_DUAL_EXTRUDER,
     SNAPMAKER_2_A250_DUAL_EXTRUDER,
     SNAPMAKER_2_A350_DUAL_EXTRUDER,
@@ -74,9 +77,6 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
                 "Discovering networked printer... (interface: %s)", sock.address.toString())
             sock.discover(b"discover")
 
-        # save tokens
-        self._http_token_manager.saveTokens()
-
         # TODO: remove output devices that not reply message for a period of time
 
     def __onData(self, msg: str) -> None:
@@ -120,7 +120,10 @@ class SnapmakerOutputDevicePlugin(OutputDevicePlugin):
                 # Artisan
                 device = SnapmakerArtisanOutputDevice(device_id, address, properties)
                 self.getOutputDeviceManager().addOutputDevice(device)
-            elif model in [SNAPMAKER_2_A150_DUAL_EXTRUDER['model'],
+            elif model in [SNAPMAKER_2_A150['model'],
+                           SNAPMAKER_2_A250['model'],
+                           SNAPMAKER_2_A350['model'],
+                           SNAPMAKER_2_A150_DUAL_EXTRUDER['model'],
                            SNAPMAKER_2_A250_DUAL_EXTRUDER['model'],
                            SNAPMAKER_2_A350_DUAL_EXTRUDER['model'], ]:
                 # Snapmaker 2.0 Dual Extruder
