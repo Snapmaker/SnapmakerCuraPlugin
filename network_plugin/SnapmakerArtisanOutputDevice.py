@@ -38,7 +38,6 @@ class SnapmakerArtisanOutputDevice(SACPNetworkedPrinterOutputDevice):
         self._stream = StringIO()  # create a new io stream
 
         writer = SnapmakerGCodeWriter()
-        writer.setExtruderMode("Normal")
 
         job = WriteFileJob(writer, self._stream, nodes, MeshWriter.OutputMode.TextMode)
         job.finished.connect(self._writeFileJobFinished)

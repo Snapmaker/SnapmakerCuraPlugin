@@ -37,7 +37,7 @@ class SnapmakerGCodeWriter(MeshWriter):
     def __init__(self) -> None:
         super().__init__(add_to_recent_files=True)
 
-        self._extruder_mode = "Normal"
+        self._extruder_mode = "Default"
         self._header_version = 1
 
     def setExtruderMode(self, extruder_mode: str) -> None:
