@@ -26,7 +26,7 @@
             "default_value": "M2000 S200 V250 A6000"
         },
         "machine_extruder_end_code": {
-            "default_value": ""
+            "default_value": "M106 P0 S0 ;fan off"
         }
     }
 }
